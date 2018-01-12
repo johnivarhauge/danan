@@ -2,6 +2,7 @@
 #include <unistd.h> 
 #include <stdlib.h>
 #include <stdio.h>
+#include <fcntl.h>
 
 #define LOKAL_PORT 55556
 #define BAK_LOGG 10 // Størrelse på for kø ventende forespørsler 
@@ -31,13 +32,19 @@ int main ()
 
   // Venter på forespørsel om forbindelse
   listen(sd, BAK_LOGG); 
+
+  int ret, fd;
+  char buf[50];
+
   while(1){ 
 
     // Aksepterer mottatt forespørsel
     ny_sd = accept(sd, NULL, NULL);    
 
     if(0==fork()) {
-
+      read(ny_sd, buf, sizeof(buf)-1);
+      write(1, buf, sizeof(buf)-1);
+  
       dup2(ny_sd, 1); // redirigerer socket til standard utgang
 
       printf("HTTP/1.1 200 OK\n");

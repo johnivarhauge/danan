@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <string.h>
 
 #define LOKAL_PORT 55556
 #define BAK_LOGG 10 // Størrelse på for kø ventende forespørsler 
@@ -36,6 +37,10 @@ int main ()
   int ret, fd;
   char buf[50];
 
+  const char spaceslash[3] = " /";
+  const char space[2] = " ";
+  char *token;
+
   while(1){ 
 
     // Aksepterer mottatt forespørsel
@@ -43,7 +48,15 @@ int main ()
 
     if(0==fork()) {
       read(ny_sd, buf, sizeof(buf)-1);
-      write(1, buf, sizeof(buf)-1);
+      token = strtok(buf, space);
+      char requestmethod[strlen(token)];
+      strcpy(requestmethod,token);
+      token = strtok(NULL, space);
+      char filepath[strlen(token)]; 
+      strcpy(filepath,token);
+
+      write(1, requestmethod, strlen(requestmethod));
+      write(1, filepath, strlen(filepath));
   
       dup2(ny_sd, 1); // redirigerer socket til standard utgang
 

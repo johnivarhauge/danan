@@ -37,7 +37,7 @@ int main ()
   int ret, fd;
   char buf[50];
 
-  const char spaceslash[3] = " /";
+  const char dot[2] = ".";
   const char space[2] = " ";
   char *token;
 
@@ -47,16 +47,27 @@ int main ()
     ny_sd = accept(sd, NULL, NULL);    
 
     if(0==fork()) {
+      //leser til buffer fra socket
       read(ny_sd, buf, sizeof(buf)-1);
+      //henter ut request-metode
       token = strtok(buf, space);
       char requestmethod[strlen(token)];
       strcpy(requestmethod,token);
+      //henter ut filsti
       token = strtok(NULL, space);
       char filepath[strlen(token)]; 
       strcpy(filepath,token);
-
+      //henter ut filtype
+      char filetoken[strlen(token)]; 
+      strcpy(filetoken,token);
+      token = strtok(filetoken, dot);
+      token = strtok(NULL, space);
+      char filetype[strlen(token)];
+      strcpy(filetype,token);
+      //skriver ut de ulike delene av stien på standard ut
       write(1, requestmethod, strlen(requestmethod));
       write(1, filepath, strlen(filepath));
+      write(1, filetype, strlen(filetype));
   
       dup2(ny_sd, 1); // redirigerer socket til standard utgang
 

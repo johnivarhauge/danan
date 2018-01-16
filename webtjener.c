@@ -21,7 +21,7 @@ int main ()
   // Setter opp socket-strukturen
   sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
-  // For at operativsystemet ikke skal holdte porten reservert etter tjenerens død
+  // For at operativsystemet ikke skal holde porten reservert etter tjenerens død
   setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &(int){ 1 }, sizeof(int));
 
   // Initierer lokal adresse
@@ -83,7 +83,7 @@ int main ()
       if (strcmp(filepath, "HTTP")==0)
         fd = open("index.asis", O_RDONLY);
       else if (fd == -1){
-         fd = open("404.html", O_RDONLY);
+        fd = open("404.html", O_RDONLY);
       }
         int size = lseek(fd,0,SEEK_END);
         lseek(fd,0,0);

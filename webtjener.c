@@ -107,7 +107,6 @@ int main ()
       // NB! Frigjør ingen plass i fildeskriptortabellen
       shutdown(ny_sd, SHUT_RDWR); 
     }
-
     else {
       close(ny_sd);
     }

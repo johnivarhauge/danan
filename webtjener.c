@@ -102,7 +102,7 @@ int main ()
         int size = lseek(fd,0,SEEK_END);
         lseek(fd,0,0);
         sendfile(ny_sd, fd, NULL, size);
-      
+    
       // Sørger for å stenge socket for skriving og lesing
       // NB! Frigjør ingen plass i fildeskriptortabellen
       shutdown(ny_sd, SHUT_RDWR); 

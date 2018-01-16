@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include <string.h>
+#include <signal.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -25,6 +26,12 @@ int main ()
   {
     perror(logFile);
   }
+
+  struct sigaction sigchld_action = {
+    .sa_handler = SIG_DFL,
+    .sa_flags = SA_NOCLDWAIT
+  };
+  
 
   struct sockaddr_in  lok_adr;
   int sd, ny_sd;
@@ -106,6 +113,7 @@ int main ()
       // Sørger for å stenge socket for skriving og lesing
       // NB! Frigjør ingen plass i fildeskriptortabellen
       shutdown(ny_sd, SHUT_RDWR); 
+      sigaction(SIGCHLD, &sigchld_action, NULL);
     }
     else {
       close(ny_sd);

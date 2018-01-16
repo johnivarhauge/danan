@@ -72,7 +72,7 @@ int main ()
         char filetype[strlen(token)];
         strcpy(filetype,token);
       }*/
-      
+
       //skriver ut de ulike delene av stien på standard ut
       write(1, requestmethod, strlen(requestmethod));
       write(1, "\n", 2);
@@ -80,7 +80,9 @@ int main ()
 
      // write(1, filetype, strlen(filetype));
       fd = open(filepath, O_RDONLY);
-      if (fd == -1){
+      if (strcmp(filepath, "HTTP")==0)
+        fd = open("index.asis", O_RDONLY);
+      else if (fd == -1){
          fd = open("404.html", O_RDONLY);
       }
         int size = lseek(fd,0,SEEK_END);

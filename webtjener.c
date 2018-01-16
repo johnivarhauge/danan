@@ -5,6 +5,10 @@
 #include <fcntl.h>
 #include <string.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/sendfile.h>
+
 #define LOKAL_PORT 55556
 #define BAK_LOGG 10 // Størrelse på for kø ventende forespørsler 
 
@@ -36,6 +40,7 @@ int main ()
 
   int ret, fd;
   char buf[50];
+  char requestbuffer[30];
 
   const char dot[2] = ".";
   const char space[2] = " ";
@@ -54,28 +59,31 @@ int main ()
       char requestmethod[strlen(token)];
       strcpy(requestmethod,token);
       //henter ut filsti
-      token = strtok(NULL, space);
+      token = strtok(NULL, " /");
       char filepath[strlen(token)]; 
       strcpy(filepath,token);
       //henter ut filtype
-      char filetoken[strlen(token)]; 
-      strcpy(filetoken,token);
-      token = strtok(filetoken, dot);
-      token = strtok(NULL, space);
-      char filetype[strlen(token)];
-      strcpy(filetype,token);
+      /*if (filepath!=NULL) {
+        char filetoken[strlen(token)]; 
+        strcpy(filetoken,token);
+        token = strtok(filetoken, dot);
+        token = strtok(NULL, space);
+        char filetype[strlen(token)];
+        strcpy(filetype,token);
+      }*/
       //skriver ut de ulike delene av stien på standard ut
       write(1, requestmethod, strlen(requestmethod));
+      write(1, "\n", 2);
       write(1, filepath, strlen(filepath));
-      write(1, filetype, strlen(filetype));
-  
-      dup2(ny_sd, 1); // redirigerer socket til standard utgang
-
-      printf("HTTP/1.1 200 OK\n");
-      printf("Content-Type: text/plain\n");
-      printf("\n");
-      printf("Hallo klient!\n");
-
+     // write(1, filetype, strlen(filetype));
+      fd = open(filepath, O_RDONLY);
+      if (fd == -1){
+         fd = open("404.html", O_RDONLY);
+      }
+        int size = lseek(fd,0,SEEK_END);
+        lseek(fd,0,0);
+        sendfile(ny_sd, fd, NULL, size);
+      
       // Sørger for å stenge socket for skriving og lesing
       // NB! Frigjør ingen plass i fildeskriptortabellen
       shutdown(ny_sd, SHUT_RDWR); 

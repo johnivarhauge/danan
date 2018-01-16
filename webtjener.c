@@ -14,6 +14,17 @@
 
 int main ()
 {
+  //Skriver til error.log fra STDERR
+  char *logFile="./error.log";
+  int fp;
+  if((fp=open(logFile,O_CREAT|O_APPEND|O_WRONLY,0644))!=-1)
+  {
+    dup2(fp,2);
+  }
+  else
+  {
+    perror(logFile);
+  }
 
   struct sockaddr_in  lok_adr;
   int sd, ny_sd;
@@ -46,12 +57,15 @@ int main ()
   const char space[2] = " ";
   char *token;
 
+  //Test for å skrive to STDERR
+  //fprintf( stderr, "my %s has %d chars\n", "string format", 30);
+
   while(1){ 
 
     // Aksepterer mottatt forespørsel
     ny_sd = accept(sd, NULL, NULL);    
 
-    if(0==fork()) {
+    if(0==fork()) { 
       //leser til buffer fra socket
       read(ny_sd, buf, sizeof(buf)-1);
       //henter ut request-metode
@@ -88,7 +102,7 @@ int main ()
         int size = lseek(fd,0,SEEK_END);
         lseek(fd,0,0);
         sendfile(ny_sd, fd, NULL, size);
-      
+    
       // Sørger for å stenge socket for skriving og lesing
       // NB! Frigjør ingen plass i fildeskriptortabellen
       shutdown(ny_sd, SHUT_RDWR); 

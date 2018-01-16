@@ -14,6 +14,17 @@
 
 int main ()
 {
+  if(fork()!=0){
+    exit(0);
+  }
+
+  setsid();
+  signal(SIGHUP, SIG_IGN);
+  
+  if(fork()!=0){
+    exit(0);
+  }
+  
   //Skriver til error.log fra STDERR
   char *logFile="./error.log";
   int fp;

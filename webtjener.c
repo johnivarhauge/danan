@@ -63,16 +63,7 @@ int main ()
       char filepath[strlen(token)]; 
       strcpy(filepath,token);
       //henter ut filtype
-<<<<<<< HEAD
-      
-      /*char filetoken[strlen(token)]; 
-      strcpy(filetoken,token);
-      token = strtok(filetoken, dot);
-      token = strtok(NULL, space);
-      char filetype[strlen(token)];
-      strcpy(filetype,token);*/
 
-=======
       /*if (filepath!=NULL) {
         char filetoken[strlen(token)]; 
         strcpy(filetoken,token);
@@ -81,22 +72,12 @@ int main ()
         char filetype[strlen(token)];
         strcpy(filetype,token);
       }*/
->>>>>>> 2c6af4a4ef7e4ef55fd9df48a6935ee565671b3e
+      
       //skriver ut de ulike delene av stien på standard ut
       write(1, requestmethod, strlen(requestmethod));
       write(1, "\n", 2);
       write(1, filepath, strlen(filepath));
-<<<<<<< HEAD
-      //write(1, filetype, strlen(filetype));
-  
-      dup2(ny_sd, 1); // redirigerer socket til standard utgang
 
-      printf("HTTP/1.1 200 OK\n");
-      printf("Content-Type: text/plain\n");
-      printf("\n");
-      printf("Hallo klient!\n");
-
-=======
      // write(1, filetype, strlen(filetype));
       fd = open(filepath, O_RDONLY);
       if (fd == -1){
@@ -106,7 +87,6 @@ int main ()
         lseek(fd,0,0);
         sendfile(ny_sd, fd, NULL, size);
       
->>>>>>> 2c6af4a4ef7e4ef55fd9df48a6935ee565671b3e
       // Sørger for å stenge socket for skriving og lesing
       // NB! Frigjør ingen plass i fildeskriptortabellen
       shutdown(ny_sd, SHUT_RDWR); 

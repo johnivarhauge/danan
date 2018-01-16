@@ -58,16 +58,18 @@ int main ()
       char filepath[strlen(token)]; 
       strcpy(filepath,token);
       //henter ut filtype
-      char filetoken[strlen(token)]; 
+      
+      /*char filetoken[strlen(token)]; 
       strcpy(filetoken,token);
       token = strtok(filetoken, dot);
       token = strtok(NULL, space);
       char filetype[strlen(token)];
-      strcpy(filetype,token);
+      strcpy(filetype,token);*/
+
       //skriver ut de ulike delene av stien på standard ut
       write(1, requestmethod, strlen(requestmethod));
       write(1, filepath, strlen(filepath));
-      write(1, filetype, strlen(filetype));
+      //write(1, filetype, strlen(filetype));
   
       dup2(ny_sd, 1); // redirigerer socket til standard utgang
 

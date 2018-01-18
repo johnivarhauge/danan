@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="deltagere.xsl"?>
+
+<deltagere>
+    <oss>
+        <id>01</id>
+        <tittel>Electrifying</tittel>
+        <navn>Andreas</navn>
+        <gruppeid>123</gruppeid>
+    </oss>
+    <oss>
+       <id>01</id>
+        <tittel>Miraculous</tittel>
+        <navn>Adrian</navn>
+        <gruppeid>123</gruppeid>
+    </oss>
+    <oss>
+        <id>01</id>
+        <tittel>Phenomenal</tittel>
+        <navn>Kristian</navn>
+        <gruppeid>345</gruppeid>
+    </oss>
+    <oss>
+        <id>01</id>
+        <tittel>Harmonious</tittel>
+        <navn>John-Ivar</navn>
+        <gruppeid>456</gruppeid>
+    </oss>
+</deltagere>

@@ -92,7 +92,9 @@ int main ()
       dup2(ny_sd, 0);
       dup2(ny_sd, 1);
 
-    
+      int setuid(uid_t uid);
+      int setgid(gid_t gid);
+
       char pid[5];
       sprintf(pid, "ls -l /proc/%d/fd", getpid());
       system(pid);

@@ -8,6 +8,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/sendfile.h>
+#include <dirent.h>
 
 #define LOKAL_PORT 55556
 #define BAK_LOGG 10 // Størrelse på for kø ventende forespørsler 
@@ -36,11 +37,14 @@ int main ()
   {
     perror(logFile);
   }
+  close(3);
+
 
   struct sigaction sigchld_action = {
     .sa_handler = SIG_DFL,
     .sa_flags = SA_NOCLDWAIT
   };
+
   struct sockaddr_in  lok_adr;
   int sd, ny_sd;
 
@@ -62,7 +66,7 @@ int main ()
     exit(1);
 
   // Venter på forespørsel om forbindelse
-  listen(sd, BAK_LOGG); 
+  listen(sd, BAK_LOGG);
 
   int ret, fd;
   char buf[50];
@@ -83,10 +87,16 @@ int main ()
     int pid = fork();
     if(pid==0) { 
       close(sd);
-      close(stdin);
-      close(stdout);
+      close(0);
+      close(1);
       dup2(ny_sd, 0);
       dup2(ny_sd, 1);
+
+    
+      char pid[5];
+      sprintf(pid, "ls -l /proc/%d/fd", getpid());
+      system(pid);
+
       //leser til buffer fra socket
       read(0, buf, sizeof(buf)-1);
       //henter ut request-metode

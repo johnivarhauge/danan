@@ -82,8 +82,13 @@ int main ()
 
     int pid = fork();
     if(pid==0) { 
+      close(sd);
+      close(stdin);
+      close(stdout);
+      dup2(ny_sd, 0);
+      dup2(ny_sd, 1);
       //leser til buffer fra socket
-      read(ny_sd, buf, sizeof(buf)-1);
+      read(0, buf, sizeof(buf)-1);
       //henter ut request-metode
       token = strtok(buf, space);
       char requestmethod[strlen(token)];

@@ -85,6 +85,7 @@ int main ()
     ny_sd = accept(sd, NULL, NULL);    
 
     int pid = fork();
+
     if(pid==0) { 
       close(sd);
       close(0);
@@ -95,9 +96,11 @@ int main ()
       int setuid(uid_t uid);
       int setgid(gid_t gid);
 
+      /* Debugging av fildeskriptorer
       char pid[5];
       sprintf(pid, "ls -l /proc/%d/fd", getpid());
       system(pid);
+      */
 
       //leser til buffer fra socket
       read(0, buf, sizeof(buf)-1);
@@ -109,32 +112,59 @@ int main ()
       token = strtok(NULL, " /");
       char filepath[strlen(token)]; 
       strcpy(filepath,token);
-      //henter ut filtype
-
-      /*if (filepath!=NULL) {
-        char filetoken[strlen(token)]; 
-        strcpy(filetoken,token);
-        token = strtok(filetoken, dot);
-        token = strtok(NULL, space);
-        char filetype[strlen(token)];
-        strcpy(filetype,token);
-      }*/
-
-      //skriver ut de ulike delene av stien på standard ut
-      write(1, requestmethod, strlen(requestmethod));
-      write(1, "\n", 2);
-      write(1, filepath, strlen(filepath));
 
      // write(1, filetype, strlen(filetype));
       fd = open(filepath, O_RDONLY);
       if (strcmp(filepath, "HTTP")==0)
         fd = open("index.asis", O_RDONLY);
       else if (fd == -1){
-        fd = open("404.html", O_RDONLY);
+        printf("HTTP/1.1 404 NOT FOUND\n");
+        printf("Content-Type: text/plain\n");
+        printf("\n");
+        printf("Not Found!\n");
       }
-        int size = lseek(fd,0,SEEK_END);
-        lseek(fd,0,0);
-        sendfile(ny_sd, fd, NULL, size);
+      else {
+        char filetoken[strlen(token)];
+        strcpy(filetoken,token);
+        token = strtok(filetoken, dot);
+        token = strtok(NULL, space);
+        char filetype[strlen(token)];
+        strcpy(filetype,token);
+        
+        /* Debugging info om filsti.
+        write(1, requestmethod, strlen(requestmethod));
+        write(1, "\n", 1);
+        write(1, filepath, strlen(filepath));
+        write(1, "\n", 1);
+        write(1, filetype, strlen(filetype));
+        */
+        printf("HTTP/1.1 200 OK\n");
+        if (strcmp(filetype, "png")==0) {
+          printf("Content-Type: image/png\n\n");
+        }
+        else if( strcmp(filetype, "xml")==0) {
+          printf("Content-Type: application/xml\n\n");
+        }
+        else if( strcmp(filetype, "html")==0) {
+          printf("Content-Type: text/html\n\n");
+        }
+        else if( strcmp(filetype, "htm")==0) {
+          printf("Content-Type: text/html\n\n");
+        }
+        else if( strcmp(filetype, "xsl")==0) {
+          printf("Content-Type: application/xslt+xml\n\n");
+        }
+        else if( strcmp(filetype, "css")==0) {
+          printf("Content-Type: text/css\n\n");
+        }
+        else {
+          printf("Content-Type: text/plain\n\n");
+        }
+      }
+      
+      int size = lseek(fd,0,SEEK_END);
+      lseek(fd,0,0);
+      sendfile(ny_sd, fd, NULL, size);
     
       // Sørger for å stenge socket for skriving og lesing
       // NB! Frigjør ingen plass i fildeskriptortabellen

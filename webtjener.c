@@ -112,9 +112,12 @@ int main ()
       token = strtok(NULL, " /");
       char filepath[strlen(token)]; 
       strcpy(filepath,token);
+      //Legger til absolutt sti
+      char fullpath[] = "/var/www/static/";
+      strcpy(fullpath, filepath);
 
      // write(1, filetype, strlen(filetype));
-      fd = open(filepath, O_RDONLY);
+      fd = open(fullpath, O_RDONLY);
       if (strcmp(filepath, "HTTP")==0)
         fd = open("index.asis", O_RDONLY);
       else if (fd == -1){

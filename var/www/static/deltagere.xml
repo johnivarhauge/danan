@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/css" href="deltagere.css"?>
+
+<deltagere>
+    <oss>
+        <id>01</id>
+        <tittel>Imposing</tittel>
+        <navn>Andreas</navn>
+        <gruppeid>123</gruppeid>
+    </oss>
+    <oss>
+       <id>01</id>
+        <tittel>Fearsome</tittel>
+        <navn>Adrian</navn>
+        <gruppeid>123</gruppeid>
+    </oss>
+    <oss>
+        <id>01</id>
+        <tittel>Stunning</tittel>
+        <navn>Kristian</navn>
+        <gruppeid>345</gruppeid>
+    </oss>
+    <oss>
+        <id>01</id>
+        <tittel>Wonderful</tittel>
+        <navn>John-Ivar</navn>
+        <gruppeid>456</gruppeid>
+    </oss>
+</deltagere>

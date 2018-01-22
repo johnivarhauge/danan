@@ -1,0 +1,33 @@
+deltagere
+{
+    background-color:   #FEFEFA;
+    display:            table;
+}
+
+oss
+{
+    display:            table-row;
+    background-color:   #fa0101;
+    text-align:         center;  
+}
+
+tittel
+{
+    display:            table-row;
+    background-color:   #1201fa;
+    text-align:         center;  
+}
+
+navn
+{
+    display:            table-row;
+    background-color:   #ffffff;
+    text-align:         center;  
+}
+
+gruppeid
+{
+    display:            table-row;
+    background-color:   #09fa01;
+    text-align:         center;  
+}

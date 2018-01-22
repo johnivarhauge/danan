@@ -113,13 +113,15 @@ int main ()
       char filepath[strlen(token)]; 
       strcpy(filepath,token);
       //Legger til absolutt sti
-      char fullpath[] = "/var/www/static/";
-      strcpy(fullpath, filepath);
+      char root_dir[] = "/var/www/static";
+      char fullpath[17 + strlen(filepath)];
+      strcpy(fullpath, root_dir);
+      strcat(fullpath, filepath);
 
      // write(1, filetype, strlen(filetype));
       fd = open(fullpath, O_RDONLY);
       if (strcmp(filepath, "HTTP")==0)
-        fd = open("index.asis", O_RDONLY);
+        fd = open("/var/www/static/index.html", O_RDONLY);
       else if (fd == -1){
         printf("HTTP/1.1 404 NOT FOUND\n");
         printf("Content-Type: text/plain\n");
@@ -134,7 +136,7 @@ int main ()
         char filetype[strlen(token)];
         strcpy(filetype,token);
         
-        /* Debugging info om filsti.
+        /*Debugging info om filsti.
         write(1, requestmethod, strlen(requestmethod));
         write(1, "\n", 1);
         write(1, filepath, strlen(filepath));

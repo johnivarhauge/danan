@@ -10,7 +10,7 @@
 #include <sys/sendfile.h>
 #include <dirent.h>
 
-#define LOKAL_PORT 55556
+#define LOKAL_PORT 80
 #define BAK_LOGG 10 // Størrelse på for kø ventende forespørsler 
 
 int main ()
@@ -141,7 +141,7 @@ int main ()
         char filetype[strlen(token)];
         strcpy(filetype,token);
         
-        /*Debugging info om filsti.
+        //Debugging info om filsti.
         write(1, requestmethod, strlen(requestmethod));
         write(1, "\n", 1);
         write(1, filepath, strlen(filepath));
@@ -149,7 +149,7 @@ int main ()
         write(1, filetype, strlen(filetype));
         write(1, "\n", 1);
         write(1, fullpath, strlen(fullpath));
-        */
+        
         printf("HTTP/1.1 200 OK\n");
         if (strcmp(filetype, "png")==0) {
           printf("Content-Type: image/png\n\n");

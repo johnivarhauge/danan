@@ -138,7 +138,7 @@ int main ()
       if (strchr(filepath,'?')==NULL || strcmp(requestmethod, "POST")!=0)
       strcat(fullpath, filepath);
 
-      if (strchr(filepath,'?')!=NULL || strcmp(requestmethod, "POST")==0){
+      if (strchr(filepath,'?')!=NULL && (open(fullpath, O_RDONLY) != -1) || strcmp(requestmethod, "POST")==0){
         //strcat(fullpath, cgipath);
         system("var/www/dynamic/handleinfo.cgi");
         /*

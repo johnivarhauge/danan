@@ -10,7 +10,7 @@
 #include <sys/sendfile.h>
 #include <dirent.h>
 
-#define LOKAL_PORT 55556
+#define LOKAL_PORT 80
 #define BAK_LOGG 10 // Størrelse på for kø ventende forespørsler 
 
 int main ()
@@ -113,70 +113,98 @@ int main ()
       char filepath[strlen(token)]; 
       strcpy(filepath,token);
       //Legger til absolutt sti
-      char root_dir[] = "var/www/static/";
+      char root_dir[17];
+      strcpy(root_dir,"var/www/static/");
+      if (strchr(filepath,'?')!=NULL){
+        strcpy(root_dir,"var/www/dynamic/");
+        char temp[strlen(filepath)];
+        strcpy(temp, filepath);
+        token = strtok(temp,"?");
+        char cgipath[strlen(token)];
+        strcpy(cgipath, token);
+        token = strtok(NULL, " ");
+        setenv("QUERY_STRING", token, 1);
+      }
+
       char fullpath[18 + strlen(filepath)];
       strcpy(fullpath, root_dir);
       strcat(fullpath, filepath);
 
-     // write(1, filetype, strlen(filetype));
-      fd = open(fullpath, O_RDONLY);
-      if (strcmp(filepath, "HTTP")==0){
-        printf("HTTP/1.1 200 OK\n");
-        printf("Content-Type: text/html\n\n");
-        fd = open("var/www/static/index.html", O_RDONLY);
-      }  
-      else if (fd == -1){
+      if (strchr(filepath,'?')!=NULL){
+        //exec(fullpath);
+
         printf("HTTP/1.1 404 NOT FOUND\n");
         printf("Content-Type: text/html\n\n");
         fd = open("var/www/static/404.html", O_RDONLY);
-
-        write(1, "\n", 1);
         write(1, fullpath, strlen(fullpath));
+        system("env | grep QUERY_STRING");
+        int size = lseek(fd,0,SEEK_END);
+        lseek(fd,0,0);
+        sendfile(ny_sd, fd, NULL, size);
+
       }
       else {
-        char filetoken[strlen(token)];
-        strcpy(filetoken,token);
-        token = strtok(filetoken, dot);
-        token = strtok(NULL, space);
-        char filetype[strlen(token)];
-        strcpy(filetype,token);
-        
-        /*Debugging info om filsti.
-        write(1, requestmethod, strlen(requestmethod));
-        write(1, "\n", 1);
-        write(1, filepath, strlen(filepath));
-        write(1, "\n", 1);
-        write(1, filetype, strlen(filetype));
-        write(1, "\n", 1);
-        write(1, fullpath, strlen(fullpath));
-        */
-        printf("HTTP/1.1 200 OK\n");
-        if (strcmp(filetype, "png")==0) {
-          printf("Content-Type: image/png\n\n");
-        }
-        else if( strcmp(filetype, "xml")==0) {
-          printf("Content-Type: application/xml\n\n");
-        }
-        else if( strcmp(filetype, "html")==0) {
+        fd = open(fullpath, O_RDONLY);
+
+        if (strcmp(filepath, "HTTP")==0){
+          printf("HTTP/1.1 200 OK\n");
           printf("Content-Type: text/html\n\n");
-        }
-        else if( strcmp(filetype, "htm")==0) {
+          fd = open("var/www/static/index.html", O_RDONLY);
+        }  
+        else if (fd == -1){
+          printf("HTTP/1.1 404 NOT FOUND\n");
           printf("Content-Type: text/html\n\n");
-        }
-        else if( strcmp(filetype, "xsl")==0) {
-          printf("Content-Type: application/xslt+xml\n\n");
-        }
-        else if( strcmp(filetype, "css")==0) {
-          printf("Content-Type: text/css\n\n");
+          fd = open("var/www/static/404.html", O_RDONLY);
+
+          //write(1, "\n", 1);
+          //write(1, fullpath, strlen(fullpath));
+          system("env | grep QUERY_STRING");
         }
         else {
-          printf("Content-Type: text/plain\n\n");
+          char filetoken[strlen(token)];
+          strcpy(filetoken,token);
+          token = strtok(filetoken, dot);
+          token = strtok(NULL, space);
+          char filetype[strlen(token)];
+          strcpy(filetype,token);
+          
+          /*Debugging info om filsti.
+          write(1, requestmethod, strlen(requestmethod));
+          write(1, "\n", 1);
+          write(1, filepath, strlen(filepath));
+          write(1, "\n", 1);
+          write(1, filetype, strlen(filetype));
+          write(1, "\n", 1);
+          write(1, fullpath, strlen(fullpath));
+          */
+          printf("HTTP/1.1 200 OK\n");
+          if (strcmp(filetype, "png")==0) {
+            printf("Content-Type: image/png\n\n");
+          }
+          else if( strcmp(filetype, "xml")==0) {
+            printf("Content-Type: application/xml\n\n");
+          }
+          else if( strcmp(filetype, "html")==0) {
+            printf("Content-Type: text/html\n\n");
+          }
+          else if( strcmp(filetype, "htm")==0) {
+            printf("Content-Type: text/html\n\n");
+          }
+          else if( strcmp(filetype, "xsl")==0) {
+            printf("Content-Type: application/xslt+xml\n\n");
+          }
+          else if( strcmp(filetype, "css")==0) {
+            printf("Content-Type: text/css\n\n");
+          }
+          else {
+            printf("Content-Type: text/plain\n\n");
+          }
         }
-      }
       
-      int size = lseek(fd,0,SEEK_END);
-      lseek(fd,0,0);
-      sendfile(ny_sd, fd, NULL, size);
+        int size = lseek(fd,0,SEEK_END);
+        lseek(fd,0,0);
+        sendfile(ny_sd, fd, NULL, size);
+      }
     
       // Sørger for å stenge socket for skriving og lesing
       // NB! Frigjør ingen plass i fildeskriptortabellen

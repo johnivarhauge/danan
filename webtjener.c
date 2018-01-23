@@ -69,8 +69,8 @@ int main ()
   listen(sd, BAK_LOGG);
 
   int ret, fd;
-  char buf[50];
-  char requestbuffer[30];
+  char buf[2000];
+  char tempbuf[2000];
 
   const char dot[2] = ".";
   const char space[2] = " ";
@@ -104,10 +104,12 @@ int main ()
 
       //leser til buffer fra socket
       read(0, buf, sizeof(buf)-1);
-      //henter ut request-metode
+      strcpy(tempbuf, buf);
+      //henter ut request-metode og setter miljøvariabel
       token = strtok(buf, space);
       char requestmethod[strlen(token)];
       strcpy(requestmethod,token);
+      setenv("REQUEST_METHOD", requestmethod, 1);
       //henter ut filsti
       token = strtok(NULL, " /");
       char filepath[strlen(token)]; 
@@ -115,33 +117,43 @@ int main ()
       //Legger til absolutt sti
       char root_dir[17];
       strcpy(root_dir,"var/www/static/");
-      if (strchr(filepath,'?')!=NULL){
+      char cgipath[255];
+      if (strchr(filepath,'?')!=NULL || strcmp(requestmethod, "POST")==0){
         strcpy(root_dir,"var/www/dynamic/");
-        char temp[strlen(filepath)];
-        strcpy(temp, filepath);
-        token = strtok(temp,"?");
-        char cgipath[strlen(token)];
-        strcpy(cgipath, token);
-        token = strtok(NULL, " ");
-        setenv("QUERY_STRING", token, 1);
+        if (strcmp(requestmethod, "GET")==0) {
+          char temp[strlen(filepath)];
+          strcpy(temp, filepath);
+          token = strtok(temp,"?");
+          strcpy(cgipath, token);
+          token = strtok(NULL, " ");
+          setenv("QUERY_STRING", token, 1);
+        }
+        else
+          setenv("QUERY_STRING", strstr(tempbuf, "brukernavn"), 1);
       }
 
       char fullpath[18 + strlen(filepath)];
       strcpy(fullpath, root_dir);
+
+      if (strchr(filepath,'?')==NULL || strcmp(requestmethod, "POST")!=0)
       strcat(fullpath, filepath);
 
-      if (strchr(filepath,'?')!=NULL){
-        //exec(fullpath);
-
+      if (strchr(filepath,'?')!=NULL || strcmp(requestmethod, "POST")==0){
+        //strcat(fullpath, cgipath);
+        system("var/www/dynamic/handleinfo.cgi");
+        /*
         printf("HTTP/1.1 404 NOT FOUND\n");
         printf("Content-Type: text/html\n\n");
         fd = open("var/www/static/404.html", O_RDONLY);
+        //write(1, tempbuf, strlen(tempbuf));
         write(1, fullpath, strlen(fullpath));
+        system("env | grep REQUEST_METHOD");
         system("env | grep QUERY_STRING");
+
         int size = lseek(fd,0,SEEK_END);
         lseek(fd,0,0);
         sendfile(ny_sd, fd, NULL, size);
-
+        */
       }
       else {
         fd = open(fullpath, O_RDONLY);
@@ -155,10 +167,6 @@ int main ()
           printf("HTTP/1.1 404 NOT FOUND\n");
           printf("Content-Type: text/html\n\n");
           fd = open("var/www/static/404.html", O_RDONLY);
-
-          //write(1, "\n", 1);
-          //write(1, fullpath, strlen(fullpath));
-          system("env | grep QUERY_STRING");
         }
         else {
           char filetoken[strlen(token)];
@@ -167,16 +175,7 @@ int main ()
           token = strtok(NULL, space);
           char filetype[strlen(token)];
           strcpy(filetype,token);
-          
-          /*Debugging info om filsti.
-          write(1, requestmethod, strlen(requestmethod));
-          write(1, "\n", 1);
-          write(1, filepath, strlen(filepath));
-          write(1, "\n", 1);
-          write(1, filetype, strlen(filetype));
-          write(1, "\n", 1);
-          write(1, fullpath, strlen(fullpath));
-          */
+
           printf("HTTP/1.1 200 OK\n");
           if (strcmp(filetype, "png")==0) {
             printf("Content-Type: image/png\n\n");
@@ -205,7 +204,6 @@ int main ()
         lseek(fd,0,0);
         sendfile(ny_sd, fd, NULL, size);
       }
-    
       // Sørger for å stenge socket for skriving og lesing
       // NB! Frigjør ingen plass i fildeskriptortabellen
       shutdown(ny_sd, SHUT_RDWR); 

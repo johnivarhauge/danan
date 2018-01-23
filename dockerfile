@@ -1,7 +1,8 @@
-FROM scratch
-ADD busybox.tar.xz /
-COPY ./a.out /bin/webtjener
-COPY ./index.asis /bin
-COPY ./404.html /bin
+#Using Minimal Docker Image
+FROM busybox
+
+#Each COPY command will add a new Image Layer
+COPY var/ /var/
+COPY a.out /bin/webtjener
 EXPOSE 80
-CMD ["sh"]
+CMD ["/bin/sh"]

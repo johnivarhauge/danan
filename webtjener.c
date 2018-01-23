@@ -144,10 +144,37 @@ int main ()
 
       }
       else {
+<<<<<<< HEAD
         fd = open(fullpath, O_RDONLY);
 
         if (strcmp(filepath, "HTTP")==0){
           printf("HTTP/1.1 200 OK\n");
+=======
+        char filetoken[strlen(token)];
+        strcpy(filetoken,token);
+        token = strtok(filetoken, dot);
+        token = strtok(NULL, space);
+        char filetype[strlen(token)];
+        strcpy(filetype,token);
+        
+        //Debugging info om filsti.
+        write(1, requestmethod, strlen(requestmethod));
+        write(1, "\n", 1);
+        write(1, filepath, strlen(filepath));
+        write(1, "\n", 1);
+        write(1, filetype, strlen(filetype));
+        write(1, "\n", 1);
+        write(1, fullpath, strlen(fullpath));
+        
+        printf("HTTP/1.1 200 OK\n");
+        if (strcmp(filetype, "png")==0) {
+          printf("Content-Type: image/png\n\n");
+        }
+        else if( strcmp(filetype, "xml")==0) {
+          printf("Content-Type: application/xml\n\n");
+        }
+        else if( strcmp(filetype, "html")==0) {
+>>>>>>> 828e5e00fe2398a8cb3267d8afcbb2f0676bdd25
           printf("Content-Type: text/html\n\n");
           fd = open("var/www/static/index.html", O_RDONLY);
         }  

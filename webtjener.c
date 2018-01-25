@@ -116,7 +116,7 @@ int main ()
       strcpy(filepath,token);
       //Legger til absolutt sti
       char root_dir[17];
-      strcpy(root_dir,"/var/www/static/");
+      strcpy(root_dir,"var/www/static/");
       char cgipath[255];
       if (strchr(filepath,'?')!=NULL || strcmp(requestmethod, "POST")==0){
         strcpy(root_dir,"var/www/dynamic/");
@@ -140,11 +140,11 @@ int main ()
 
       if (strchr(filepath,'?')!=NULL && (open(fullpath, O_RDONLY) != -1) || strcmp(requestmethod, "POST")==0){
         //strcat(fullpath, cgipath);
-        system("/var/www/dynamic/handleinfo.cgi");
+        system("var/www/dynamic/handleinfo.cgi");
         /*
         printf("HTTP/1.1 404 NOT FOUND\n");
         printf("Content-Type: text/html\n\n");
-        fd = open("/var/www/static/404.html", O_RDONLY);
+        fd = open("var/www/static/404.html", O_RDONLY);
         //write(1, tempbuf, strlen(tempbuf));
         write(1, fullpath, strlen(fullpath));
         system("env | grep REQUEST_METHOD");
@@ -161,12 +161,12 @@ int main ()
         if (strcmp(filepath, "HTTP")==0){
           printf("HTTP/1.1 200 OK\n");
           printf("Content-Type: text/html\n\n");
-          fd = open("/var/www/static/index.html", O_RDONLY);
+          fd = open("var/www/static/index.html", O_RDONLY);
         }  
         else if (fd == -1){
           printf("HTTP/1.1 404 NOT FOUND\n");
           printf("Content-Type: text/html\n\n");
-          fd = open("/var/www/static/404.html", O_RDONLY);
+          fd = open("var/www/static/404.html", O_RDONLY);
         }
         else {
           char filetoken[strlen(token)];

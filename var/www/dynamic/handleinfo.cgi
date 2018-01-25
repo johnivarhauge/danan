@@ -8,12 +8,18 @@ status="bruker finnes"
 
 if [ "$statustall" -eq "1" ]
 then
-    echo Status er 1
+    # echo Status er 1
     dbpassord=$(echo "select passordhash from brukere where brukernavn='$bruker';" | sqlite3 info.db)
     if [ "$passordhash" = "$dbpassord" ]
         then
-            echo login vellykket
+            echo "HTTP/1.1 200 OK"
+            echo "Content-type:text/plain;charset=utf-8"
+            echo
+            echo "login vellykket"
         else
+            echo "HTTP/1.1 200 OK"
+            echo "Content-type:text/plain;charset=utf-8"
+            echo
             echo feil innloggingsinfo
             echo passordhash: $passordhash dbhash: $dbpassord
     fi
@@ -21,7 +27,9 @@ fi
 
 if [ "$statustall" -eq "0" ]
 then
-    echo Status er 0
+    echo "HTTP/1.1 200 OK"
+    echo "Content-type:text/plain;charset=utf-8"
+    echo
     echo "insert into brukere (brukernavn,passordhash,passord) values ('$bruker','$passordhash','$passord');" | sqlite3 info.db
     echo ny bruker opprettet med brukernavn: $bruker og passord $passord
 fi
@@ -31,4 +39,4 @@ fi
 
  #Skriver ut 'http-kropp'
 
-pwd
+#pwd

@@ -126,6 +126,7 @@ int main ()
           token = strtok(temp,"?");
           strcpy(cgipath, token);
           token = strtok(NULL, " ");
+          //eksporterer query_string til miljøet
           setenv("QUERY_STRING", token, 1);
         }
         else
@@ -135,11 +136,12 @@ int main ()
       char fullpath[18 + strlen(filepath)];
       strcpy(fullpath, root_dir);
       
-      //Gjelder for alle filer som ikke er get med parameter eller post
+      //Bygger filsti for alle filer som ikke er get med parameter eller post
       if (strchr(filepath,'?')==NULL && strcmp(requestmethod, "POST")!=0)
       strcat(fullpath, filepath);
       else 
       strcat(fullpath, cgipath);
+
       //Gjelder for post og get med parameter
       if (strchr(filepath,'?')!=NULL && (open(fullpath, O_RDONLY) != -1) || strcmp(requestmethod, "POST")==0){
         system("var/www/dynamic/handleinfo.cgi");

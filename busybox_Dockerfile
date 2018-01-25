@@ -1,9 +1,9 @@
 #Using Minimal Docker Image
-FROM alpine
+FROM busybox
 
-RUN apk add --update sqlite
+#Each COPY command will add a new Image Layer
 COPY var/ /var/
 COPY a.out /webtjener
-COPY info.db /
+COPY info.db /bin/
 EXPOSE 80
 CMD ["/bin/sh"]

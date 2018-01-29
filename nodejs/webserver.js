@@ -20,7 +20,7 @@ restapi.get('/data/:id', function(req, res){
         }
         else {
             res.set('Content-Type', 'text/xml');
-            res.send(xml(row)));
+            res.send(xml(row));
         }
     });
 });

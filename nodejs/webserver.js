@@ -3,6 +3,8 @@ var db = new sqlite3.Database('database');
 var xml = require('xml');
 var express = require('express');
 var restapi = express();
+var jsontoxml = require('jsontoxml');
+
 
 
 db.serialize(function() {
@@ -19,8 +21,11 @@ restapi.get('/data/:id', function(req, res){
             res.status(500);
         }
         else {
-            res.set('Content-Type', 'text/xml');
-            res.send(xml(row));
+            res.set('Content-Type', 'application/xml');
+ 
+            var xmlstring = '<bruker xsi:schemaLocation="brukereschema.xsd">' + jsontoxml(row) + '</bruker>' 
+            //lage bruker xml skjema
+            res.send(xmlstring);
         }
     });
 });

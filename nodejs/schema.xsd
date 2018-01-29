@@ -4,7 +4,7 @@
 <xs:element name="Bruker">
   <xs:complexType>
     <xs:sequence>
-      <xs:element name="brukerID" type="xs:integer"/>
+      <xs:element name="brukerID" type="xs:integer" use="required"/>
       <xs:element name="passordhash" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
@@ -13,7 +13,7 @@
 <xs:element name="Sesjon">
   <xs:complexType>
     <xs:sequence>
-      <xs:element name="sesjonsID" type="xs:integer"/>
+      <xs:element name="sesjonsID" type="xs:integer" use="required"/>
       <xs:element name="brukerID" type="xs:integer"/>
     </xs:sequence>
   </xs:complexType>
@@ -22,7 +22,7 @@
 <xs:element name="Dikt">
   <xs:complexType>
     <xs:sequence>
-      <xs:element name="diktID" type="xs:integer"/>
+      <xs:element name="diktID" type="xs:integer" use="required"/>
       <xs:element name="dikt" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>

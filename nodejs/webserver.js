@@ -1,27 +1,34 @@
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('test');
+var db = new sqlite3.Database('database');
 var xml = require('xml');
-
-db.serialize(function() {
-    db.run("CREATE TABLE IF NOT EXISTS counts (key TEXT, value INTEGER)");
-    db.run("INSERT INTO counts (key, value) VALUES (?, ?)", "counter", 0);
-});
-
-
-
 var express = require('express');
 var restapi = express();
 
+
+db.serialize(function() {
+    db.run("PRAGMA foreign_keys = 1");
+    db.run("CREATE TABLE IF NOT EXISTS Bruker (brukerID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,passordhash TEXT NOT NULL)");
+    db.run("CREATE TABLE IF NOT EXISTS Sesjon (sesjonsID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,brukerID INTEGER NOT NULL, FOREIGN KEY(brukerID) REFERENCES Bruker(brukerID))");
+});
+
 restapi.get('/data', function(req, res){
-    db.get("SELECT value FROM counts", function(err, row){
-        var xmlString = xml([{ count: row.value }]);
+    db.get("SELECT * FROM Bruker", function(err, row){
+        if (err){
+            console.err(err);
+            res.status(500);
+        }
+        else {
+            res.send(row);
+        }
+        
+        /*var xmlString = xml([{ count: row.value }]);
 		res.set('Content-Type', 'text/xml');
-		res.send(xmlString);
+		res.send(xmlString);*/
     });
 });
 
 restapi.post('/data', function(req, res){
-    db.run("UPDATE counts SET value = value + 1 WHERE key = ?", "counter", function(err, row){
+    db.get("SELECT * FROM Bruker", function(err, row){
         if (err){
             console.err(err);
             res.status(500);

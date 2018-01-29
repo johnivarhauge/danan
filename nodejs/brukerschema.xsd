@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
+<schema>
 
-<xs:element name="Bruker">
-  <xs:complexType>
-    <xs:sequence>
-      <xs:element name="brukerID" type="xs:integer"/>
-      <xs:element name="passordhash" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-</xs:element>
+<element name="Bruker">
+  <complexType>
+    <sequence>
+      <element name="brukerID" type="integer"/>
+      <element name="passordhash" type="string"/>
+    </sequence>
+  </complexType>
+</element>
 
-</xs:schema> 
+</schema> 

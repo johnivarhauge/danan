@@ -93,6 +93,18 @@ restapi.post('/nybruker/:brukernavn/:passordhash/:passord', function(req, res){
         }
     });
 });
+//slette en sesjon
+restapi.delete('/slettsesjon/:brukerID', function(req, res){
+    db.run("delete * from Sesjon where brukerID = ? ",[req.params.brukerID],function(err, row){
+        if (err){
+            console.err(err);
+            res.status(500);
+        }
+        else {
+             console.log('bruker slettet');
+    });
+});
+
 
 restapi.get('/data/:id', function(req, res){
     db.get("SELECT * FROM Bruker where brukerID = ?",[req.params.id], function(err, row){

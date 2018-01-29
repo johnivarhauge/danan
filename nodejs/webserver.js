@@ -17,13 +17,12 @@ db.serialize(function() {
 restapi.get('/data/:id', function(req, res){
     db.get("SELECT * FROM Bruker where brukerID = ?",[req.params.id], function(err, row){
         if (err){
-            console.err(err);
+            console.err(err);urn:MyData
             res.status(500);
         }
         else {
             res.set('Content-Type', 'application/xml');
- 
-            var xmlstring = '<bruker xsi:schemaLocation="brukereschema.xsd">' + jsontoxml(row) + '</bruker>' 
+            var xmlstring = '<?xml version="1.0"?>\n<bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</bruker>' 
             //lage bruker xml skjema
             res.send(xmlstring);
         }

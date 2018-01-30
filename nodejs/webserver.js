@@ -75,7 +75,7 @@ restapi.post('/nybruker/:passordhash', function(req, res){
             res.status(500);
         }
         else {
-            console.log('ny bruker opprettet');
+            console.log('ny sesjon opprettet');
         }
     });
     db.get("SELECT sesjonsID FROM Sesjon where brukerID = ?",[req.params.brukerID],function(err, row){
@@ -92,7 +92,7 @@ restapi.post('/nybruker/:passordhash', function(req, res){
 });
 //slette en sesjon
 restapi.delete('/slettsesjon/:brukerID', function(req, res){
-    db.run("delete * from Sesjon where brukerID = ? ",[req.params.brukerID],function(err, row){
+    db.run("delete from Sesjon where brukerID = ? ",[req.params.brukerID],function(err, row){
         if (err){
             console.err(err);
             res.status(500);

@@ -17,20 +17,21 @@ db.serialize(function() {
 //Login service: 
 //for å sjekke om bruker finnes. 
 restapi.get('/brukersjekk/:brukernavn', function(req, res){
-    db.get("SELECT count(*) FROM Bruker where brukernavn = ?",[req.params.brukernavn], function(err, row){
+    db.get("SELECT count(brukerID) as antall FROM Bruker where brukerID = ?",[req.params.brukernavn], function(err, row){
         if (err){
             console.err(err);
             res.status(500);
         }
         else {
             res.set('Content-Type', 'application/xml');
-            var xmlstring = '<?xml version="1.0"?>\n<Antall xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Antall>' 
+            var xmlstring = '<?xml version="1.0"?>\n<bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</bruker>' 
             //lage bruker xml skjemaurn:MyData
             res.send(xmlstring);
+            console.log(row);
         }
     });
 });
-//hente ut passordhash 
+//hente ut passordhash h xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Passordhash>' 
 restapi.get('/passordsjekk/:brukernavn', function(req, res){
     db.get("SELECT passordhash FROM Bruker where brukernavn = ?",[req.params.brukernavn], function(err, row){
         if (err){

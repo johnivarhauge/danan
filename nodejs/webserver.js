@@ -117,7 +117,6 @@ restapi.delete('/slettsesjon/:brukerID', function(req, res){
             res.set('Content-Type', 'application/xml');
             var xmlstring = '<?xml version="1.0"?>\n<Bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Bruker>'
             res.send(xmlstring);
-            console.log(row);
         }
     });
 });
@@ -137,6 +136,48 @@ restapi.post('/nyttdikt/', function(req, res){
         }
     });
 });
+//Lese ut et dikt
+restapi.get('/nyttdikt/:diktID', function(req, res){
+    db.run("Select * from Dikt where diktID = ?",[req.params.diktID], function(err, row){
+        if (err){
+            console.err(err);
+            res.status(500);
+        }
+        else {
+            res.set('Content-Type', 'application/xml');
+            var xmlstring = '<?xml version="1.0"?>\n<Dikt xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Dikt>'
+            res.send(xmlstring);
+        }
+    });
+});
+//Lese ut alle dikt
+restapi.get('/nyttdikt/:diktID', function(req, res){
+    db.run("Select * from Dikt",[req.params.diktID], function(err, row){
+        if (err){
+            console.err(err);
+            res.status(500);
+        }
+        else {
+            res.set('Content-Type', 'application/xml');
+            var xmlstring = '<?xml version="1.0"?>\n<Dikt xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Dikt>'
+            res.send(xmlstring);
+        }
+    });
+});
+
+//Endre et dikt
+restapi.put('/nyttdikt/:diktID', function(req, res){
+    var dikt = String(req.body).between('<dikt>','</dikt>').s;
+    db.run("UPDATE Dikt set dikt = ? where diktID = ?",[dikt, req.params.diktID], function(err, row){
+        if (err){
+            console.err(err);
+            res.status(500);
+        }
+        else {
+            console.log('dikt: '+req.params.diktID+" oppdatert")
+        }
+    });
+});
 //Slette dikt
 restapi.delete('/nyttdikt/:diktID', function(req, res){
     db.run("DELETE from Dikt where diktID = ?",[req.params.diktID], function(err, row){
@@ -146,6 +187,18 @@ restapi.delete('/nyttdikt/:diktID', function(req, res){
         }
         else {
             console.log(req.params.diktID +" slettet");
+        }
+    });
+});
+//Slette alle dikt
+restapi.delete('/nyttdikt/', function(req, res){
+    db.run("DELETE from Dikt",[req.params.diktID], function(err, row){
+        if (err){
+            console.err(err);
+            res.status(500);
+        }
+        else {
+            console.log("alle dikt slettet");
         }
     });
 });

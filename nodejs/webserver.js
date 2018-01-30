@@ -16,38 +16,37 @@ db.serialize(function() {
 
 //Login service: 
 //for å sjekke om bruker finnes. 
-restapi.get('/brukersjekk/:brukernavn', function(req, res){
-    db.get("SELECT count(brukerID) as antall FROM Bruker where brukerID = ?",[req.params.brukernavn], function(err, row){
+restapi.get('/brukersjekk/:brukerID', function(req, res){
+    db.get("SELECT count(brukerID) as antall FROM Bruker where brukerID = ?",[req.params.brukerID], function(err, row){
         if (err){
             console.err(err);
             res.status(500);
         }
         else {
             res.set('Content-Type', 'application/xml');
-            var xmlstring = '<?xml version="1.0"?>\n<bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</bruker>' 
-            //lage bruker xml skjemaurn:MyData
+            var xmlstring = '<?xml version="1.0"?>\n<Bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Bruker>'
             res.send(xmlstring);
             console.log(row);
         }
     });
 });
-//hente ut passordhash h xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Passordhash>' 
-restapi.get('/passordsjekk/:brukernavn', function(req, res){
-    db.get("SELECT passordhash FROM Bruker where brukernavn = ?",[req.params.brukernavn], function(err, row){
+//hente ut passordhash
+restapi.get('/passordsjekk/:brukerID', function(req, res){
+    db.get("SELECT passordhash FROM Bruker where brukerID = ?",[req.params.brukerID], function(err, row){
         if (err){
             console.err(err);
             res.status(500);
         }
         else {
             res.set('Content-Type', 'application/xml');
-            var xmlstring = '<?xml version="1.0"?>\n<Passordhash xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Passordhash>' 
+            var xmlstring = '<?xml version="1.0"?>\n<Bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Bruker>' 
             res.send(xmlstring);
         }
     });
 });
 //registrere ny bruker
-restapi.post('/nybruker/:brukernavn/:passordhash/:passord', function(req, res){
-    db.run("INSERT INTO BRUKER(brukernavn, passordhash, passord) VALUES((?),(?),(?))",[req.params.brukernavn,req.params.passordhash,req.params.passord], function(err, row){
+restapi.post('/nybruker/:passordhash', function(req, res){
+    db.run("INSERT INTO BRUKER(passordhash) VALUES(?)",[req.params.passordhash], function(err, row){
         if (err){
             console.err(err);
             res.status(500);
@@ -56,6 +55,18 @@ restapi.post('/nybruker/:brukernavn/:passordhash/:passord', function(req, res){
             console.log('ny bruker opprettet');
         }
     });
+    db.get("Select brukerID from Bruker where passordhash = ?",[req.params.passordhash], function(err, row){
+        if (err){
+            console.err(err);
+            res.status(500);
+        }
+        else {
+            res.set('Content-Type', 'application/xml');
+            var xmlstring = '<?xml version="1.0"?>\n<Bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Bruker>' 
+            res.send(xmlstring);
+        }
+    });
+    
 });
  //sjekke bruker id
  restapi.get('/brukerid/:brukernavn', function(req, res){
@@ -117,7 +128,7 @@ restapi.get('/data/:id', function(req, res){
         else {
             res.set('Content-Type', 'application/xml');
             var xmlstring = '<?xml version="1.0"?>\n<bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</bruker>' 
-            //lage bruker xml skjemaurn:MyData
+            //lage bruker xml skjema
             res.send(xmlstring);
             console.log(req.body);
         }
@@ -133,7 +144,7 @@ restapi.get('/data/', function(req, res){
         else {
             res.set('Content-Type', 'application/xml');
             var xmlstring = '<?xml version="1.0"?>\n<bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</bruker>' 
-            //lage bruker xml skjemaurn:MyData
+            //lage bruker xml skjema
             res.send(xmlstring);
             console.log(req.body);
         }

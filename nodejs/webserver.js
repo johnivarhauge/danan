@@ -132,7 +132,7 @@ restapi.post('/nyttdikt/', function(req, res){
             console.log(row);
         }
      });*/
-     var brukerID = String(req.body).between(<brukerID>,</brukerID>);
+     var brukerID = String(req.body).between('<brukerID>','</brukerID>').s;
      console.log(brukerID);
 });
 

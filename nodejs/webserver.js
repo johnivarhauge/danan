@@ -4,9 +4,11 @@ var xml = require('xml');
 var express = require('express');
 var restapi = express();
 var jsontoxml = require('jsontoxml');
+var String = require('string');
 
 var bodyParser = require('body-parser');
 restapi.use(bodyParser.text({ type: 'text/xml' }));
+
 
 db.serialize(function() {
     db.run("PRAGMA foreign_keys = 1");
@@ -130,7 +132,8 @@ restapi.post('/nyttdikt/', function(req, res){
             console.log(row);
         }
      });*/
-     console.log(req.body);
+     var brukerID = String(req.body).between(<brukerID>,</brukerID>);
+     console.log(brukerID);
 });
 
 

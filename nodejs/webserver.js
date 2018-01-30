@@ -17,7 +17,7 @@ db.serialize(function() {
 //Login service: 
 //for å sjekke om bruker finnes. 
 restapi.get('/brukersjekk/:brukerID', function(req, res){
-    db.get("SELECT count(brukerID) as antall FROM Bruker where brukerID = ?",[req.params.brukerID], function(err, row){
+    db.get("SELECT count(brukerID) as Antall FROM Bruker where brukerID = ?",[req.params.brukerID], function(err, row){
         if (err){
             console.err(err);
             res.status(500);
@@ -65,25 +65,10 @@ restapi.post('/nybruker/:passordhash', function(req, res){
             var xmlstring = '<?xml version="1.0"?>\n<Bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Bruker>' 
             res.send(xmlstring);
         }
-    });
-    
-});
- //sjekke bruker id
- restapi.get('/brukerid/:brukernavn', function(req, res){
-    db.get("SELECT brukerID FROM Bruker where brukernavn = (?)",[req.params.brukernavn], function(err, row){
-        if (err){
-            console.err(err);
-            res.status(500);
-        }
-        else {
-            res.set('Content-Type', 'application/xml');
-            var xmlstring = '<?xml version="1.0"?>\n<BrukerID xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</BrukerID>' 
-            res.send(xmlstring);
-        }
-    });
- }); 
+    });    
+}); 
 //Opprette ny sesjon returnerer sesjonsid
- restapi.get('/nysesjon/:brukerID', function(req, res){
+ restapi.post('/nysesjon/:brukerID', function(req, res){
     db.run("INSERT INTO Sesjon(brukerID) VALUES(?)",[req.params.brukerID],function(err, row){
         if (err){
             console.err(err);
@@ -93,14 +78,14 @@ restapi.post('/nybruker/:passordhash', function(req, res){
             console.log('ny bruker opprettet');
         }
     });
-    db.get("SELECT sesjonsID FROM Sesjon where brukernavn = (row)", function(err, row){
+    db.get("SELECT sesjonsID FROM Sesjon where brukerID = ?",[req.params.brukerID],function(err, row){
         if (err){
             console.err(err);
             res.status(500);
         }
         else {
             res.set('Content-Type', 'application/xml');
-            var xmlstring = '<?xml version="1.0"?>\n<SesjonsID xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</SesjonsID>' 
+            var xmlstring = '<?xml version="1.0"?>\n<Bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Bruker>' 
             res.send(xmlstring);
         }
     });

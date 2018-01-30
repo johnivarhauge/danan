@@ -98,7 +98,19 @@ restapi.delete('/slettsesjon/:brukerID', function(req, res){
             res.status(500);
         }
         else {
-             console.log('bruker slettet');
+            console.log('bruker slettet');
+        }
+    });
+    db.get("SELECT count(brukerID) as Antall FROM Sesjon where brukerID = ?",[req.params.brukerID], function(err, row){
+        if (err){
+            console.err(err);
+            res.status(500);
+        }
+        else {
+            res.set('Content-Type', 'application/xml');
+            var xmlstring = '<?xml version="1.0"?>\n<Bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Bruker>'
+            res.send(xmlstring);
+            console.log(row);
         }
     });
 });

@@ -1,42 +1,46 @@
 #!/bin/sh
 
-bruker=$(echo $QUERY_STRING | cut -f1 -d '&' | cut -f2 -d '=')
-passord=$(echo $QUERY_STRING | cut -f2 -d '&' | cut -f2 -d '=')
-passordhash=$(echo -n $passord | md5sum | cut -f 1 -d ' ')
-statustall=$(echo "select count(*) from brukere where brukernavn='$bruker';" | sqlite3 info.db)
-status="bruker finnes"
+BRUKER=$(echo $QUERY_STRING | cut -f1 -d '&' | cut -f2 -d '=')
+PASSORD=$(echo $QUERY_STRING | cut -f2 -d '&' | cut -f2 -d '=')
+PWDHASH=$(echo -n $PASSORD | md5sum | cut -f 1 -d ' ')
 
-if [ "$statustall" -eq "1" ]
-then
-    # echo Status er 1
-    dbpassord=$(echo "select passordhash from brukere where brukernavn='$bruker';" | sqlite3 info.db)
-    if [ "$passordhash" = "$dbpassord" ]
-        then
-            echo "HTTP/1.1 200 OK"
-            echo "Content-type:text/plain;charset=utf-8"
-            echo
-            echo "login vellykket"
-        else
-            echo "HTTP/1.1 200 OK"
-            echo "Content-type:text/plain;charset=utf-8"
-            echo
-            echo feil innloggingsinfo
-            echo passordhash: $passordhash dbhash: $dbpassord
+RESPONS=$(curl --request GET localhost:3000/brukersjekk/$BRUKER)
+ERBRUKER=$(echo $RESPONS | grep -oP '(?<=Antall>)[^<]+')
+
+#If username exists
+if [$ERBRUKER > 0]; then
+    RESPONS=$(curl --request GET localhost:3000/passordsjekk/$BRUKER)
+    KORREKTPWD=$(echo $RESPONS | grep -oP '(?<=passordhash>)[^<]+')
+    #If password matches
+    if [KORREKTPWD = PWDHASH]; then
+        #Creates a session ID
+        COOKIE=$(echo -n $BRUKER$PASSORD | md5sum | cut -f 1 -d ' ')
+        #Saves session ID to REST-Server database
+        curl --request POST -H "Content-Type: text/xml" -d "<Sesjon><sesjonsID>$COOKIE</sesjonsID><brukerID>$BRUKER</brukerID></Sesjon>" http://localhost:3000/nysesjon
+        #Sends response to client and redirects
+        echo "HTTP/1.1 200 OK"
+        echo "Content-type:text/html;charset=utf-8"
+        echo "Set-Cookie: sesjonsID="$COOKIE
+        echo
+        echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; http://localhost/dikt.html"></head><body></body></html>'
+    #If password does not match
+    else
+        echo "HTTP/1.1 200 OK"
+        echo "Content-type:text/plain;charset=utf-8"
+        echo 
+        echo "Incorrect Password!"
     fi
-fi
-
-if [ "$statustall" -eq "0" ]
-then
+#If username does not exist
+else
+    #Saves new user to database
+    curl --request POST -H "Content-Type: text/xml" -d "<Bruker><brukerID>$BRUKER</brukerID><passordhash>$PWDHASH</passordhash></Bruker>" http://localhost:3000/nybruker
+    #Creates a session ID
+    COOKIE=$(echo -n $BRUKER$PASSORD | md5sum | cut -f 1 -d ' ')
+    #Saves session ID to REST-Server database
+    curl --request POST -H "Content-Type: text/xml" -d "<Sesjon><sesjonsID>$COOKIE</sesjonsID><brukerID>$BRUKER</brukerID></Sesjon>" http://localhost:3000/nysesjon
     echo "HTTP/1.1 200 OK"
-    echo "Content-type:text/plain;charset=utf-8"
+    echo "Content-type:text/html;charset=utf-8"
+    echo "Set-Cookie: sesjonsID="$COOKIE
     echo
-    echo "insert into brukere (brukernavn,passordhash,passord) values ('$bruker','$passordhash','$passord');" | sqlite3 info.db
-    echo ny bruker opprettet med brukernavn: $bruker og passord $passord
+    echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>User Added</title></head><body><h1>User Added</h1><a href="http://localhost/dikt.html">Continue</a></body></html>'
 fi
-# Skriver ut 'http-header' og tom linje
-# echo "Content-type:text/plain;charset=utf-8"
-# echo
-
- #Skriver ut 'http-kropp'
-
-#pwd

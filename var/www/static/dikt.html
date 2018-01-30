@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+  <head>
+        <meta charset="utf-8">
+        <title>Dikt</title>
+        <script>
+
+        </script>
+  </head>
+  <body>
+    <form action=>
+        <!-- listen skal kunne ta imot navn fra db-->
+        <select id="list" size=5>
+            <option hidden disabled selected value></option>
+            <option>roser</option>
+            <option>Solen er blaa</option>
+            <option>hei på dei</option>
+            <option>katten</option>
+            <option>snøen daler ned</option>
+            <option>data</option>
+        </select>
+        <br>
+        <input type="button" value="les dikt">
+        <input type="button" value="rediger dikt">
+        <input type="button" value="slett dikt">
+        <button type="button" onclick="document.getElementById('nyttdikt').style.display='block'">opprett nytt dikt</button>
+        <br>
+        <div id="nyttdikt" style="display:none">
+        Diktnavn: <input type="text" name="diktnavn"><br>
+        <textarea name="dikt" rows="12" cols="60"></textarea><br>
+        <input type="submit" value="lagre" align="right">
+        </div>
+        
+    </form>
+    
+  </body>
+
+</html>

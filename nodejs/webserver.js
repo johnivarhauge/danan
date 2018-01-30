@@ -9,7 +9,7 @@ restapi.use(bodyParser.raw());
 
 db.serialize(function() {
     db.run("PRAGMA foreign_keys = 1");
-    db.run("CREATE TABLE IF NOT EXISTS Bruker (brukerID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,passordhash TEXT NOT NULL)");
+    db.run("CREATE TABLE IF NOT EXISTS Bruker (brukerID TEXT NOT NULL PRIMARY KEY,passordhash TEXT NOT NULL)");
     db.run("CREATE TABLE IF NOT EXISTS Sesjon (sesjonsID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,brukerID INTEGER NOT NULL, FOREIGN KEY(brukerID) REFERENCES Bruker(brukerID))");
     db.run("CREATE TABLE IF NOT EXISTS Dikt (diktID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,dikt TEXT NOT NULL)");
 });
@@ -45,8 +45,8 @@ restapi.get('/passordsjekk/:brukerID', function(req, res){
     });
 });
 //registrere ny bruker
-restapi.post('/nybruker/:passordhash', function(req, res){
-    db.run("INSERT INTO BRUKER(passordhash) VALUES(?)",[req.params.passordhash], function(err, row){
+restapi.post('/nybruker/:brukerID/:passordhash', function(req, res){
+    db.run("INSERT INTO BRUKER(brukerID,passordhash) VALUES(?,?)",[req.params.brukerID,req.params.passordhash], function(err, row){
         if (err){
             console.err(err);
             res.status(500);
@@ -55,7 +55,7 @@ restapi.post('/nybruker/:passordhash', function(req, res){
             console.log('ny bruker opprettet');
         }
     });
-    db.get("Select brukerID from Bruker where passordhash = ?",[req.params.passordhash], function(err, row){
+    db.get("Select brukerID, passordhash from Bruker where brukerID = ?",[req.params.brukerID], function(err, row){
         if (err){
             console.err(err);
             res.status(500);
@@ -132,34 +132,7 @@ restapi.get('/data/:id', function(req, res){
     });
 });
 
-restapi.get('/data/', function(req, res){
-    db.get("SELECT * FROM Bruker", function(err, row){
-        if (err){
-            console.err(err);
-            res.status(500);
-        }
-        else {
-            res.set('Content-Type', 'application/xml');
-            var xmlstring = '<?xml version="1.0"?>\n<bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</bruker>' 
-            //lage bruker xml skjema
-            res.send(xmlstring);
-            console.log(req.body);
-        }
-    });
-});
 
-restapi.put('/data/', function(req, res){
-    db.get("Update   FROM Bruker", function(err, row){
-        if (err){
-            console.err(err);
-            res.status(500);
-        }
-        else {
-            res.status(202);
-        }
-        res.end();
-    });
-});
 
 
 restapi.listen(3000);

@@ -10,7 +10,7 @@ restapi.use(bodyParser.raw());
 db.serialize(function() {
     db.run("PRAGMA foreign_keys = 1");
     db.run("CREATE TABLE IF NOT EXISTS Bruker (brukerID TEXT NOT NULL PRIMARY KEY,passordhash TEXT NOT NULL)");
-    db.run("CREATE TABLE IF NOT EXISTS Sesjon (sesjonsID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,brukerID INTEGER NOT NULL, FOREIGN KEY(brukerID) REFERENCES Bruker(brukerID))");
+    db.run("CREATE TABLE IF NOT EXISTS Sesjon (sesjonsID TEXT NOT NULL PRIMARY KEY,brukerID INTEGER NOT NULL, FOREIGN KEY(brukerID) REFERENCES Bruker(brukerID))");
     db.run("CREATE TABLE IF NOT EXISTS Dikt (diktID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,dikt TEXT NOT NULL)");
 });
 
@@ -114,23 +114,24 @@ restapi.delete('/slettsesjon/:brukerID', function(req, res){
         }
     });
 });
-
-
-restapi.get('/data/:id', function(req, res){
-    db.get("SELECT * FROM Bruker where brukerID = ?",[req.params.id], function(err, row){
+//Legge til dikt
+restapi.post('/nyttdikt/', function(req, res){
+    /*db.run("Insert into dikt values(?,?) ",[req.params.diktID, req.params.diktID],function(err, row){
         if (err){
             console.err(err);
             res.status(500);
         }
         else {
+            console.log('Dikt laget');
             res.set('Content-Type', 'application/xml');
-            var xmlstring = '<?xml version="1.0"?>\n<bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</bruker>' 
-            //lage bruker xml skjema
+            var xmlstring = '<?xml version="1.0"?>\n<Bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Bruker>'
             res.send(xmlstring);
-            console.log(req.body);
+            console.log(row);
         }
-    });
+     });*/
+     console.log(req.body);
 });
+
 
 
 

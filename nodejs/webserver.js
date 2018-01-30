@@ -48,8 +48,11 @@ restapi.get('/passordsjekk/:brukerID', function(req, res){
     });
 });
 //registrere ny bruker
-restapi.post('/nybruker/:brukerID/:passordhash', function(req, res){
-    db.run("INSERT INTO BRUKER(brukerID,passordhash) VALUES(?,?)",[req.params.brukerID,req.params.passordhash], function(err, row){
+restapi.post('/nybruker/', function(req, res){
+    var brukerID = String(req.body).between('<brukerID>','</brukerID>').s;
+    var passordhash = String(req.body).between('<passordhash>','</passordhash>').s;
+    
+    db.run("INSERT INTO BRUKER(brukerID,passordhash) VALUES(?,?)",[brukerID,passordhash], function(err, row){
         if (err){
             console.err(err);
             res.status(500);
@@ -71,7 +74,8 @@ restapi.post('/nybruker/:brukerID/:passordhash', function(req, res){
     });    
 }); 
 //Opprette ny sesjon returnerer sesjonsid
- restapi.post('/nysesjon/:brukerID', function(req, res){
+ restapi.post('/nysesjon/', function(req, res){
+    var brukerID = String(req.body).between('<brukerID>','</brukerID>').s;
     db.run("INSERT INTO Sesjon(brukerID) VALUES(?)",[req.params.brukerID],function(err, row){
         if (err){
             console.err(err);
@@ -119,7 +123,7 @@ restapi.delete('/slettsesjon/:brukerID', function(req, res){
 });
 //Legge til dikt
 restapi.post('/nyttdikt/', function(req, res){
-    var diktID = String(req.body).between('<diktID>','</brukerID>').s;
+    var diktID = String(req.body).between('<diktID>','</diktID>').s;
     var dikt = String(req.body).between('<dikt>','</dikt>').s;
     console.log(diktID+" "+dikt);
   
@@ -133,11 +137,18 @@ restapi.post('/nyttdikt/', function(req, res){
         }
     });
 });
-     var brukerID = String(req.body).between('<brukerID>','</brukerID>').s;
-     console.log(brukerID);
+//Slette dikt
+restapi.delete('/nyttdikt/:diktID', function(req, res){
+    db.run("DELETE from Dikt where diktID = ?",[req.params.diktID], function(err, row){
+        if (err){
+            console.err(err);
+            res.status(500);
+        }
+        else {
+            console.log(req.params.diktID +" slettet");
+        }
+    });
 });
-
-
 
 
 

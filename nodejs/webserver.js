@@ -119,19 +119,20 @@ restapi.delete('/slettsesjon/:brukerID', function(req, res){
 });
 //Legge til dikt
 restapi.post('/nyttdikt/', function(req, res){
-    /*db.run("Insert into dikt values(?,?) ",[req.params.diktID, req.params.diktID],function(err, row){
+    var diktID = String(req.body).between('<diktID>','</brukerID>').s;
+    var dikt = String(req.body).between('<dikt>','</dikt>').s;
+    console.log(diktID+" "+dikt);
+  
+    db.run("INSERT INTO Dikt(diktID,dikt) VALUES(?,?)",[diktID,dikt], function(err, row){
         if (err){
             console.err(err);
             res.status(500);
         }
         else {
-            console.log('Dikt laget');
-            res.set('Content-Type', 'application/xml');
-            var xmlstring = '<?xml version="1.0"?>\n<Bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Bruker>'
-            res.send(xmlstring);
-            console.log(row);
+            console.log('ny bruker opprettet');
         }
-     });*/
+    });
+});
      var brukerID = String(req.body).between('<brukerID>','</brukerID>').s;
      console.log(brukerID);
 });

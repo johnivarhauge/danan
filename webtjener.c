@@ -118,6 +118,8 @@ int main ()
       char root_dir[17];
       strcpy(root_dir,"var/www/static/");
       char cgipath[255];
+      
+      //If GET Method with parameters
       if (strchr(filepath,'?')!=NULL || strcmp(requestmethod, "POST")==0){
         strcpy(root_dir,"var/www/dynamic/");
         if (strcmp(requestmethod, "GET")==0) {
@@ -129,8 +131,13 @@ int main ()
           //eksporterer query_string til miljøet
           setenv("QUERY_STRING", token, 1);
         }
-        else
+        else {
+          char temp[strlen(filepath)];
+          strcpy(temp, filepath);
+          token = strtok(temp,"?");
+          strcpy(cgipath, token);
           setenv("QUERY_STRING", strstr(tempbuf, "brukernavn"), 1);
+        }
       }
 
       char fullpath[18 + strlen(filepath)];
@@ -144,7 +151,9 @@ int main ()
 
       //Gjelder for post og get med parameter
       if (strchr(filepath,'?')!=NULL && (open(fullpath, O_RDONLY) != -1) || strcmp(requestmethod, "POST")==0){
-        system("var/www/dynamic/handleinfo.cgi");
+        system(fullpath);
+       
+      
         /*
         printf("HTTP/1.1 404 NOT FOUND\n");
         printf("Content-Type: text/html\n\n");

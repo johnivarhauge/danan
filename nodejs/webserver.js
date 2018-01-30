@@ -4,8 +4,9 @@ var xml = require('xml');
 var express = require('express');
 var restapi = express();
 var jsontoxml = require('jsontoxml');
+
 var bodyParser = require('body-parser');
-restapi.use(bodyParser.raw());
+restapi.use(bodyParser.raw({ type: 'application/xml' }));
 
 db.serialize(function() {
     db.run("PRAGMA foreign_keys = 1");

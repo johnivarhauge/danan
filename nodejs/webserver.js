@@ -102,6 +102,7 @@ restapi.delete('/slettsesjon/:brukerID', function(req, res){
         }
         else {
              console.log('bruker slettet');
+        }
     });
 });
 

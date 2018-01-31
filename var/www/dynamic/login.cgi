@@ -33,14 +33,14 @@ if [ $ERBRUKER -eq 1 ]; then
 #If username does not exist
 else
     #Saves new user to database
-    curl --request POST -H "Content-Type: text/xml" -d "<Bruker><brukerID>$BRUKER</brukerID><passordhash>$PWDHASH</passordhash></Bruker>" http://localhost:3000/nybruker
+    newUserStatus$(curl --request POST -H "Content-Type: text/xml" -d "<Bruker><brukerID>$BRUKER</brukerID><passordhash>$PWDHASH</passordhash></Bruker>" http://localhost:3000/nybruker)
     #Creates a session ID
     COOKIE=$(echo -n $BRUKER$PASSORD | md5sum | cut -f 1 -d ' ')
     #Saves session ID to REST-Server database
-    curl --request POST -H "Content-Type: text/xml" -d "<Sesjon><sesjonsID>$COOKIE</sesjonsID><brukerID>$BRUKER</brukerID></Sesjon>" http://localhost:3000/nysesjon
+    SessionStatus=$(curl --request POST -H "Content-Type: text/xml" -d "<Sesjon><sesjonsID>$COOKIE</sesjonsID><brukerID>$BRUKER</brukerID></Sesjon>" http://localhost:3000/nysesjon)
     echo "HTTP/1.1 200 OK"
     echo "Content-type:text/html;charset=utf-8"
     echo "Set-Cookie: sesjonsID="$COOKIE
     echo
-    echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>User Added</title></head><body><h1>User Added</h1><a href="http://localhost/dikt.html">Continue</a></body></html>'
+    echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>User Added</title></head><body><script> window.location.href = "dikt.html";</script></body></html>'
 fi

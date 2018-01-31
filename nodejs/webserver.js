@@ -14,7 +14,7 @@ db.serialize(function() {
     db.run("PRAGMA foreign_keys = 1");
     db.run("CREATE TABLE IF NOT EXISTS Bruker (brukerID TEXT NOT NULL PRIMARY KEY,passordhash TEXT NOT NULL)");
     db.run("CREATE TABLE IF NOT EXISTS Sesjon (sesjonsID TEXT NOT NULL PRIMARY KEY,brukerID TEXT NOT NULL, FOREIGN KEY(brukerID) REFERENCES Bruker(brukerID))");
-    db.run("CREATE TABLE IF NOT EXISTS Dikt (diktID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,dikt TEXT NOT NULL)");
+    db.run("CREATE TABLE IF NOT EXISTS Dikt (diktID TEXT NOT NULL PRIMARY KEY,dikt TEXT NOT NULL)");
 });
 
 //Login service: 
@@ -132,8 +132,8 @@ restapi.post('/nyttdikt/', function(req, res){
     });
 });
 //Lese ut et dikt
-restapi.get('/nyttdikt/:diktID', function(req, res){
-    db.run("Select * from Dikt where diktID = ?",[req.params.diktID], function(err, row){
+restapi.get('/lesedikt/:diktID', function(req, res){
+    db.get("Select * from Dikt where diktID = ?",[req.params.diktID], function(err, row){
         if (err){
             console.err(err);
             res.status(500);
@@ -146,8 +146,8 @@ restapi.get('/nyttdikt/:diktID', function(req, res){
     });
 });
 //Lese ut alle dikt
-restapi.get('/nyttdikt/:diktID', function(req, res){
-    db.run("Select * from Dikt",[req.params.diktID], function(err, row){
+restapi.get('/lesealledikt/', function(req, res){
+    db.get("Select * from Dikt", function(err, row){
         if (err){
             console.err(err);
             res.status(500);
@@ -161,7 +161,7 @@ restapi.get('/nyttdikt/:diktID', function(req, res){
 });
 
 //Endre et dikt
-restapi.put('/nyttdikt/:diktID', function(req, res){
+restapi.put('/endredikt/:diktID', function(req, res){
     var dikt = String(req.body).between('<dikt>','</dikt>').s;
     db.run("UPDATE Dikt set dikt = ? where diktID = ?",[dikt, req.params.diktID], function(err, row){
         if (err){
@@ -174,7 +174,7 @@ restapi.put('/nyttdikt/:diktID', function(req, res){
     });
 });
 //Slette dikt
-restapi.delete('/nyttdikt/:diktID', function(req, res){
+restapi.delete('/slettedikt/:diktID', function(req, res){
     db.run("DELETE from Dikt where diktID = ?",[req.params.diktID], function(err, row){
         if (err){
             console.err(err);
@@ -186,7 +186,7 @@ restapi.delete('/nyttdikt/:diktID', function(req, res){
     });
 });
 //Slette alle dikt
-restapi.delete('/nyttdikt/', function(req, res){
+restapi.delete('/slettealledikt/', function(req, res){
     db.run("DELETE from Dikt",[req.params.diktID], function(err, row){
         if (err){
             console.err(err);

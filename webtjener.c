@@ -110,6 +110,9 @@ int main ()
       char requestmethod[strlen(token)];
       strcpy(requestmethod,token);
       setenv("REQUEST_METHOD", requestmethod, 1);
+      //eksporterer cookie til miljøet hvis den finnes
+      if (strstr(tempbuf, "cookie")!=NULL)
+        setenv("cookie", strstr(tempbuf, "cookie"),1);
       //henter ut filsti
       token = strtok(NULL, " /");
       char filepath[strlen(token)]; 
@@ -137,6 +140,9 @@ int main ()
           token = strtok(temp,"?");
           strcpy(cgipath, token);
           setenv("QUERY_STRING", strstr(tempbuf, "brukernavn"), 1);
+          //Hvis brukernavn ikke finnes, leter den etter kommando
+          if (strstr(tempbuf, "<") != NULL)
+            setenv("QUERY_STRING", strstr(tempbuf, "<"), 1);
         }
       }
 
@@ -152,8 +158,6 @@ int main ()
       //Gjelder for post og get med parameter
       if (strchr(filepath,'?')!=NULL && (open(fullpath, O_RDONLY) != -1) || strcmp(requestmethod, "POST")==0){
         system(fullpath);
-       
-      
         /*
         printf("HTTP/1.1 404 NOT FOUND\n");
         printf("Content-Type: text/html\n\n");
@@ -161,12 +165,13 @@ int main ()
         //write(1, tempbuf, strlen(tempbuf));
         write(1, fullpath, strlen(fullpath));
         //write(1, cgipath, strlen(cgipath));
-        //system("env | grep REQUEST_METHOD");
-        //system("env | grep QUERY_STRING");
-
-        int size = lseek(fd,0,SEEK_END);
-        lseek(fd,0,0);
-        sendfile(ny_sd, fd, NULL, size);
+        system("env | grep REQUEST_METHOD");
+        system("env | grep QUERY_STRING");
+        system("env | grep cookie");
+        
+        //int size = lseek(fd,0,SEEK_END);
+        //lseek(fd,0,0);
+        //sendfile(ny_sd, fd, NULL, size);
         */
       }
       else {

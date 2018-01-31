@@ -3,8 +3,21 @@
   <head>
         <meta charset="utf-8">
         <title>Dikt</title>
-        <script>
+        <script type="text/javascript">
+        function codeAddress() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "dikt.cgi?brukernavn=djkdsf&passord=jkdskdkjn", false);
+            xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4)
+            {
+              //alert(xhr.responseText);
+              document.getElementById("list").innerHTML = "<option hidden disabled selected value></option><option "+this.responseText; +"></option>"
+            }
+        };
+        xhr.send('<updateList>\n\n');
 
+        }
+        window.onload = codeAddress;
         </script>
   </head>
   <body>
@@ -30,7 +43,9 @@
         <textarea name="dikt" rows="12" cols="60"></textarea><br>
         <input type="submit" value="lagre" align="right">
         </div>
-        
+        <script>
+          document.getElementById("list").innerHTML = xhttp.responseText;
+        </script>
     </form>
     
   </body>

@@ -8,15 +8,15 @@ RESPONS=$(curl --request GET localhost:3000/brukersjekk/$BRUKER)
 ERBRUKER=$(echo $RESPONS | grep -oP '(?<=Antall>)[^<]+')
 
 #If username exists
-if [$ERBRUKER > 0]; then
+if [ $ERBRUKER -eq 1 ]; then
     RESPONS=$(curl --request GET localhost:3000/passordsjekk/$BRUKER)
     KORREKTPWD=$(echo $RESPONS | grep -oP '(?<=passordhash>)[^<]+')
     #If password matches
-    if [KORREKTPWD = PWDHASH]; then
+    if [ "$KORREKTPWD" == "$PWDHASH" ]; then
         #Creates a session ID
         COOKIE=$(echo -n $BRUKER$PASSORD | md5sum | cut -f 1 -d ' ')
         #Saves session ID to REST-Server database
-        curl --request POST -H "Content-Type: text/xml" -d "<Sesjon><sesjonsID>$COOKIE</sesjonsID><brukerID>$BRUKER</brukerID></Sesjon>" http://localhost:3000/nysesjon
+        SessionStatus=$(curl --request POST -H "Content-Type: text/xml" -d "<Sesjon><sesjonsID>$COOKIE</sesjonsID><brukerID>$BRUKER</brukerID></Sesjon>" http://localhost:3000/nysesjon)
         #Sends response to client and redirects
         echo "HTTP/1.1 200 OK"
         echo "Content-type:text/html;charset=utf-8"

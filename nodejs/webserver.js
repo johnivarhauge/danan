@@ -13,7 +13,7 @@ restapi.use(bodyParser.text({ type: 'text/xml' }));
 db.serialize(function() {
     db.run("PRAGMA foreign_keys = 1");
     db.run("CREATE TABLE IF NOT EXISTS Bruker (brukerID TEXT NOT NULL PRIMARY KEY,passordhash TEXT NOT NULL)");
-    db.run("CREATE TABLE IF NOT EXISTS Sesjon (sesjonsID TEXT NOT NULL PRIMARY KEY,brukerID INTEGER NOT NULL, FOREIGN KEY(brukerID) REFERENCES Bruker(brukerID))");
+    db.run("CREATE TABLE IF NOT EXISTS Sesjon (sesjonsID TEXT NOT NULL PRIMARY KEY,brukerID TEXT NOT NULL, FOREIGN KEY(brukerID) REFERENCES Bruker(brukerID))");
     db.run("CREATE TABLE IF NOT EXISTS Dikt (diktID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,dikt TEXT NOT NULL)");
 });
 
@@ -51,48 +51,43 @@ restapi.get('/passordsjekk/:brukerID', function(req, res){
 restapi.post('/nybruker/', function(req, res){
     var brukerID = String(req.body).between('<brukerID>','</brukerID>').s;
     var passordhash = String(req.body).between('<passordhash>','</passordhash>').s;
-    
-    db.run("INSERT INTO BRUKER(brukerID,passordhash) VALUES(?,?)",[brukerID,passordhash], function(err, row){
-        if (err){
-            console.err(err);
-            res.status(500);
-        }
-        else {
-            console.log('ny bruker opprettet');
-        }
-    });
-    db.get("Select brukerID, passordhash from Bruker where brukerID = ?",[req.params.brukerID], function(err, row){
-        if (err){
-            console.err(err);
-            res.status(500);
-        }
-        else {
-            res.set('Content-Type', 'application/xml');
-            var xmlstring = '<?xml version="1.0"?>\n<Bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Bruker>' 
-            res.send(xmlstring);
-        }
+    db.serialize(function() {
+        db.run("INSERT INTO BRUKER(brukerID,passordhash) VALUES(?,?)",[brukerID,passordhash], function(err, row){
+            if (err){
+                console.err(err);
+                res.status(500);
+            }
+            else {
+                console.log('ny bruker opprettet');
+            }
+        });
+        db.get("Select brukerID, passordhash from Bruker where brukerID = ?",[brukerID], function(err, row){
+            if (err){
+                console.err(err);
+                res.status(500);
+            }
+            else {
+                res.set('Content-Type', 'application/xml');
+                var xmlstring = '<?xml version="1.0"?>\n<Bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Bruker>' 
+                res.send(xmlstring);
+                console.log(row);
+            }
+        });
     });    
 }); 
 //Opprette ny sesjon returnerer sesjonsid
  restapi.post('/nysesjon/', function(req, res){
+    var sesjonsID = String(req.body).between('<sesjonsID>','</sesjonsID>').s;
     var brukerID = String(req.body).between('<brukerID>','</brukerID>').s;
-    db.run("INSERT INTO Sesjon(brukerID) VALUES(?)",[req.params.brukerID],function(err, row){
+    db.run("INSERT INTO Sesjon(sesjonsID, brukerID) VALUES(?, ?)",[sesjonsID, brukerID],function(err, row){
         if (err){
             console.err(err);
             res.status(500);
         }
         else {
             console.log('ny sesjon opprettet');
-        }
-    });
-    db.get("SELECT sesjonsID FROM Sesjon where brukerID = ?",[req.params.brukerID],function(err, row){
-        if (err){
-            console.err(err);
-            res.status(500);
-        }
-        else {
             res.set('Content-Type', 'application/xml');
-            var xmlstring = '<?xml version="1.0"?>\n<Bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Bruker>' 
+            var xmlstring = '<?xml version="1.0"?>\n<Sesjon xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd"> ny sesjon opprettet</Sesjon>'
             res.send(xmlstring);
         }
     });

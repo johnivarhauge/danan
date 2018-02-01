@@ -94,23 +94,30 @@ restapi.post('/nybruker/', function(req, res){
 });
 //slette en sesjon
 restapi.delete('/slettsesjon/:brukerID', function(req, res){
-    db.run("delete from Sesjon where brukerID = ? ",[req.params.brukerID],function(err, row){
+    db.run("delete from Sesjon where brukerID = ?",[req.params.brukerID],function(err, row){
         if (err){
             console.err(err);
             res.status(500);
         }
         else {
-            console.log('bruker slettet');
+            console.log('Sesjon slettet');
+            res.set('Content-Type', 'application/xml');
+            var xmlstring = '<?xml version="1.0"?>\n<Sesjon xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Sesjon>'
+            res.send(xmlstring);
         }
     });
-    db.get("SELECT count(brukerID) as Antall FROM Sesjon where brukerID = ?",[req.params.brukerID], function(err, row){
+});
+//Slette alle sesjoner
+restapi.delete('/slettallesesjoner/', function(req, res){
+    db.run("delete from Sesjon",function(err, row){
         if (err){
             console.err(err);
             res.status(500);
         }
         else {
+            console.log('Alle sesjoner slettet');
             res.set('Content-Type', 'application/xml');
-            var xmlstring = '<?xml version="1.0"?>\n<Bruker xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Bruker>'
+            var xmlstring = '<?xml version="1.0"?>\n<Sesjon xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Sesjon>'
             res.send(xmlstring);
         }
     });
@@ -147,7 +154,7 @@ restapi.get('/lesedikt/:diktID', function(req, res){
 });
 //Lese ut alle dikt
 restapi.get('/lesealledikt/', function(req, res){
-    db.get("Select * from Dikt", function(err, row){
+    db.all("Select * from Dikt", function(err, row){
         if (err){
             console.err(err);
             res.status(500);

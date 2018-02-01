@@ -4,7 +4,6 @@ BRUKER=$(echo $QUERY_STRING | cut -f1 -d '&' | cut -f2 -d '=')
 PASSORD=$(echo $QUERY_STRING | cut -f2 -d '&' | cut -f2 -d '=')
 PWDHASH=$(echo -n $PASSORD | md5sum | cut -f 1 -d ' ')
 
-
 RESPONS=$(curl --request GET localhost:3000/brukersjekk/$BRUKER)
 ERBRUKER=$(echo $RESPONS | grep -oP '(?<=Antall>)[^<]+')
 
@@ -13,9 +12,11 @@ if [ $ERBRUKER -eq 1 ]; then
     RESPONS=$(curl --request GET localhost:3000/passordsjekk/$BRUKER)
     KORREKTPWD=$(echo $RESPONS | grep -oP '(?<=passordhash>)[^<]+')
     #If password matches
-    if [ "$KORREKTPWD" == "$PWDHASH" ]; then
+    if [ "$KORREKTPWD" = "$PWDHASH" ]; then
         #Creates a session ID
         COOKIE=$(echo -n $BRUKER$PASSORD | md5sum | cut -f 1 -d ' ')
+        #delete sesjon:
+        deleteSession=$(curl --request DELETE -H "Content-Type: text/xml" -d "<Sesjon><sesjonsID>$COOKIE</sesjonsID><brukerID>$BRUKER</brukerID></Sesjon>" http://localhost:3000/slettsesjon/$BRUKER)
         #Saves session ID to REST-Server database
         SessionStatus=$(curl --request POST -H "Content-Type: text/xml" -d "<Sesjon><sesjonsID>$COOKIE</sesjonsID><brukerID>$BRUKER</brukerID></Sesjon>" http://localhost:3000/nysesjon)
         #Sends response to client and redirects
@@ -30,6 +31,7 @@ if [ $ERBRUKER -eq 1 ]; then
         echo "Content-type:text/plain;charset=utf-8"
         echo 
         echo "Incorrect Password!"
+        echo "DB: "$KORREKTPWD" User: " $PWDHASH
     fi
 #If username does not exist
 else

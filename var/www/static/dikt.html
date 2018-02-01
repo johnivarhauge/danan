@@ -4,17 +4,17 @@
         <meta charset="utf-8">
         <title>Dikt</title>
         <script type="text/javascript">
-          function updateList(id) {
+          function poem(id, kommando) {
               var xhr = new XMLHttpRequest();
               xhr.open("POST", "dikt.cgi?brukernavn=djkdsf&passord=jkdskdkjn", false);
               xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4)
                 {
                   //alert(xhr.responseText);
-                  document.getElementById(id).innerHTML = "<option hidden disabled selected value></option><option "+this.responseText; +"></option>"
+                  document.getElementById(id).innerHTML = this.responseText;
                 }
               };
-              xhr.send('<updateList>');
+              xhr.send(kommando);
           }
           //window.onload = updateList;
         </script>
@@ -23,18 +23,21 @@
     <form action=>
         <!-- listen skal kunne ta imot navn fra db-->
         <select id="list" size=5>
-  
         </select>
         <br>
-        <input type="button" value="les dikt" onclick=updateList("list");>
+        <input type="button" value="hent alle dikt" onclick="poem('list', '<updateList>')">
+        <input type="button" value="vis dikt" onclick="poem('lesedikt', '<getPoem>')">
         <input type="button" value="rediger dikt">
         <input type="button" value="slett dikt">
         <button type="button" onclick="document.getElementById('nyttdikt').style.display='block'">opprett nytt dikt</button>
         <br>
         <div id="nyttdikt" style="display:none">
         Diktnavn: <input type="text" name="diktnavn"><br>
-        <textarea name="dikt" rows="12" cols="60"></textarea><br>
         <input type="submit" value="lagre" align="right">
+        <input type="button" value="avbryt">
+        </div>
+        <div id="visdikt">
+          <textarea name="dikt" rows="12" cols="60"></textarea><br>
         </div>
         <script>
           document.getElementById("list").innerHTML = xhttp.responseText;

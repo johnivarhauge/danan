@@ -4,21 +4,19 @@
         <meta charset="utf-8">
         <title>Dikt</title>
         <script type="text/javascript">
-        function codeAddress() {
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "dikt.cgi?brukernavn=djkdsf&passord=jkdskdkjn", false);
-            xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4)
-            {
-              //alert(xhr.responseText);
-              document.getElementById("list").innerHTML = "<option hidden disabled selected value></option><option "+this.responseText; +"></option>"
-            }
-        };
-        xhr.send('<updateList>');
-
-        }
-        window.onload = codeAddress;
-
+          function updateList(id) {
+              var xhr = new XMLHttpRequest();
+              xhr.open("POST", "dikt.cgi?brukernavn=djkdsf&passord=jkdskdkjn", false);
+              xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4)
+                {
+                  //alert(xhr.responseText);
+                  document.getElementById(id).innerHTML = "<option hidden disabled selected value></option><option "+this.responseText; +"></option>"
+                }
+              };
+              xhr.send('<updateList>');
+          }
+          //window.onload = updateList;
         </script>
   </head>
   <body>
@@ -28,7 +26,7 @@
   
         </select>
         <br>
-        <input type="button" value="les dikt">
+        <input type="button" value="les dikt" onclick=updateList("list");>
         <input type="button" value="rediger dikt">
         <input type="button" value="slett dikt">
         <button type="button" onclick="document.getElementById('nyttdikt').style.display='block'">opprett nytt dikt</button>

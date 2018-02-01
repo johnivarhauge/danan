@@ -104,6 +104,7 @@ restapi.delete('/slettsesjon/:brukerID', function(req, res){
             res.set('Content-Type', 'application/xml');
             var xmlstring = '<?xml version="1.0"?>\n<Sesjon xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Sesjon>'
             res.send(xmlstring);
+            
         }
     });
 });

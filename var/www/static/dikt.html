@@ -14,7 +14,7 @@
               document.getElementById("list").innerHTML = "<option hidden disabled selected value></option><option "+this.responseText; +"></option>"
             }
         };
-        xhr.send('<updateList>\n\n');
+        xhr.send('<updateList>');
 
         }
         window.onload = codeAddress;
@@ -25,13 +25,7 @@
     <form action=>
         <!-- listen skal kunne ta imot navn fra db-->
         <select id="list" size=5>
-            <option hidden disabled selected value></option>
-            <option>roser</option>
-            <option>Solen er blaa</option>
-            <option>hei på dei</option>
-            <option>katten</option>
-            <option>snøen daler ned</option>
-            <option>data</option>
+  
         </select>
         <br>
         <input type="button" value="les dikt">

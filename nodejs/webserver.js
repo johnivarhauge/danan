@@ -74,7 +74,6 @@ restapi.post('/nybruker/', function(req, res){
             }
         });
     }); 
-       
 }); 
 //Opprette ny sesjon returnerer sesjonsid
  restapi.post('/nysesjon/', function(req, res){

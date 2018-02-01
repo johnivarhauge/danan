@@ -4,6 +4,7 @@ BRUKER=$(echo $QUERY_STRING | cut -f1 -d '&' | cut -f2 -d '=')
 PASSORD=$(echo $QUERY_STRING | cut -f2 -d '&' | cut -f2 -d '=')
 PWDHASH=$(echo -n $PASSORD | md5sum | cut -f 1 -d ' ')
 
+
 RESPONS=$(curl --request GET localhost:3000/brukersjekk/$BRUKER)
 ERBRUKER=$(echo $RESPONS | grep -oP '(?<=Antall>)[^<]+')
 

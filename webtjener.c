@@ -10,6 +10,7 @@
 #include <sys/sendfile.h>
 #include <dirent.h>
 
+
 #define LOKAL_PORT 80
 #define BAK_LOGG 10 // Størrelse på for kø ventende forespørsler 
 

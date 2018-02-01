@@ -7,4 +7,5 @@ if [ "$OPERATION" = "<updateList>" ]; then
     echo "Content-type:text/html;charset=utf-8"
     echo
     echo "$RESPONSE"
+    
 fi

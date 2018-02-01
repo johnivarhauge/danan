@@ -73,7 +73,8 @@ restapi.post('/nybruker/', function(req, res){
                 console.log(row);
             }
         });
-    });    
+    }); 
+       
 }); 
 //Opprette ny sesjon returnerer sesjonsid
  restapi.post('/nysesjon/', function(req, res){

@@ -12,3 +12,11 @@ if [ "$QUERY_STRING" = "<updateList>" ]; then
        echo "<option>""$i""</option>"
     done
 fi
+
+if [ "$QUERY_STRING" = "<getPoem>" ]; then
+    RESPONSE=$(curl --request GET localhost:3000/lesedikt/ | grep -oP '(?<=dikt>)[^<]+')
+    echo "HTTP/1.1 200 OK"
+    echo "Content-type:text/html;charset=utf-8"
+    echo
+    echo $RESPONSE
+fi

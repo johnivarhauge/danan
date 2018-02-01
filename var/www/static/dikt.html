@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <title>Dikt</title>
         <script type="text/javascript">
-          function poem(id, kommando) {
+          function poem(id, kommando, title) {
               var xhr = new XMLHttpRequest();
               xhr.open("POST", "dikt.cgi?brukernavn=djkdsf&passord=jkdskdkjn", false);
               xhr.onreadystatechange = function() {
@@ -14,8 +14,16 @@
                   document.getElementById(id).innerHTML = this.responseText;
                 }
               };
-              xhr.send(kommando);
+              xhr.send(kommando + title);
           }
+          function getSelectedText(elementId) {
+            var elt = document.getElementById(elementId);
+
+            if (elt.selectedIndex == -1)
+              return null;
+
+            return elt.options[elt.selectedIndex].value;
+          } 
           //window.onload = updateList;
         </script>
   </head>
@@ -25,8 +33,8 @@
         <select id="list" size=5>
         </select>
         <br>
-        <input type="button" value="hent alle dikt" onclick="poem('list', '<updateList>')">
-        <input type="button" value="vis dikt" onclick="poem('lesedikt', '<getPoem>')">
+        <input type="button" value="hent alle dikt" onclick="poem('list', '<updateList>', all)">
+        <input type="button" value="vis dikt" onclick="poem('innhold', '<getPoem>', getSelectedText('list')">
         <input type="button" value="rediger dikt">
         <input type="button" value="slett dikt">
         <button type="button" onclick="document.getElementById('nyttdikt').style.display='block'">opprett nytt dikt</button>
@@ -36,9 +44,7 @@
         <input type="submit" value="lagre" align="right">
         <input type="button" value="avbryt">
         </div>
-        <div id="visdikt">
-          <textarea name="dikt" rows="12" cols="60"></textarea><br>
-        </div>
+        <textarea name="dikt" id="innhold" rows="12" cols="60" ></textarea><br>
         <script>
           document.getElementById("list").innerHTML = xhttp.responseText;
         </script>

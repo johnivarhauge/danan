@@ -1,6 +1,7 @@
 #!/bin/bash
 POEMCOMMAND=$(echo $QUERY_STRING | cut -f1 -d ",")
 TITLE=$(echo $QUERY_STRING | cut -f2 -d ",")
+POEM=$(echo $QUERY_STRING | cut -f3 -d ",")
 
 if [ "$POEMCOMMAND" = "<updateList>" ]; then
     ANTALLDIKT=$(curl -s --request GET localhost:3000/antalldikt/ | grep -oP '(?<=Antall>)[^<]+')
@@ -30,4 +31,8 @@ if [ "$POEMCOMMAND" = "<getPoem>" ]; then
     echo "Content-type:text/html;charset=utf-8"
     echo
     echo "$RESPONSE"
+fi
+
+if ["$POEMCOMMAN" = "<editPoem>" ]; then
+    RESPONE=$(curl -X PUT -H "Content-Type: text/xml" -d "<dikt>$POEM</dikt>" localhost:3000/endredikt/$TITLE)
 fi

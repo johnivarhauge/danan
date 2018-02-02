@@ -136,13 +136,10 @@ int main ()
           setenv("QUERY_STRING", token, 1);
         }
         else {
-          char temp[strlen(filepath)];
-          strcpy(temp, filepath);
-          token = strtok(temp,"?");
-          strcpy(cgipath, token);
-          setenv("QUERY_STRING", strstr(tempbuf, "brukernavn"), 1);
+          if (strstr(tempbuf, "brukernavn") != NULL)
+            setenv("QUERY_STRING", strstr(tempbuf, "brukernavn"), 1);
           //Hvis brukernavn ikke finnes, leter den etter kommando
-          if (strstr(tempbuf, "<") != NULL)
+          else if (strstr(tempbuf, "<") != NULL)
             setenv("QUERY_STRING", strstr(tempbuf, "<"), 1);
         }
       }
@@ -158,8 +155,8 @@ int main ()
 
       //Gjelder for post og get med parameter
       if (strchr(filepath,'?')!=NULL && (open(fullpath, O_RDONLY) != -1) || strcmp(requestmethod, "POST")==0){
-        system(fullpath);
-        /*
+        //system(fullpath);
+        
         printf("HTTP/1.1 404 NOT FOUND\n");
         printf("Content-Type: text/html\n\n");
         fd = open("var/www/static/404.html", O_RDONLY);
@@ -173,7 +170,7 @@ int main ()
         //int size = lseek(fd,0,SEEK_END);
         //lseek(fd,0,0);
         //sendfile(ny_sd, fd, NULL, size);
-        */
+        
       }
       else {
         fd = open(fullpath, O_RDONLY);

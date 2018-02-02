@@ -10,11 +10,11 @@
               xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4)
                 {
-                  alert(xhr.responseText);
-                  //document.getElementById(id).innerHTML = this.responseText;
+                  //alert(xhr.responseText);
+                  document.getElementById(id).innerHTML = this.responseText;
                 }
               };
-              xhr.send(kommando + " " + title);
+              xhr.send(kommando + "," + title);
           }
           function getSelectedText(elementId) {
             var elt = document.getElementById(elementId);
@@ -57,9 +57,7 @@
         <input type="button" value="avbryt" onclick="document.getElementById('nyttdikt').style.display='none';document.getElementById('navn').value=''; document.getElementById('innhold').value=''">
         </div>
         <textarea name="dikt" id="innhold" rows="12" cols="60" ></textarea><br>
-        <script>
-          document.getElementById("list").innerHTML = xhttp.responseText;
-        </script>
+       
     </form>
     
   </body>

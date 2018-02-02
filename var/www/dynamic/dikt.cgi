@@ -1,6 +1,6 @@
 #!/bin/bash
-POEMCOMMAND=$(echo $QUERY_STRING | cut -f1 -d " ")
-TITLE=$(echo $QUERY_STRING | cut -f2 -d " ")
+POEMCOMMAND=$(echo $QUERY_STRING | cut -f1 -d ",")
+TITLE=$(echo $QUERY_STRING | cut -f2 -d ",")
 
 if [ "$POEMCOMMAND" = "<updateList>" ]; then
     ANTALLDIKT=$(curl -s --request GET localhost:3000/antalldikt/ | grep -oP '(?<=Antall>)[^<]+')
@@ -24,9 +24,10 @@ if [ "$POEMCOMMAND" = "<updateList>" ]; then
 fi
 
 if [ "$POEMCOMMAND" = "<getPoem>" ]; then
-    RESPONSE=$(curl --request GET localhost:3000/lesedikt/$TITLE | grep -oP '(?<=dikt>)[^<]+')
+    URLTITLE=$(echo $TITLE | sed 's/ /%20/g')
+    RESPONSE=$(curl --request GET localhost:3000/lesedikt/$URLTITLE | grep -oP '(?<=dikt>)[^<]+')
     echo "HTTP/1.1 200 OK"
     echo "Content-type:text/html;charset=utf-8"
     echo
-    echo $RESPONSE
+    echo "$RESPONSE"
 fi

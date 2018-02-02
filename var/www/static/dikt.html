@@ -32,9 +32,14 @@
             }
             var xhr = new XMLHttpRequest();
             var dikt = document.getElementById('innhold').value;
-
             xhr.open("POST", "dikt.cgi", false);
-
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4)
+                {
+                  //alert(xhr.responseText);
+                  document.getElementById('innhold').innerHTML = this.responseText;
+                }
+              };
             xhr.send(kommando + "," + title + "," + dikt);
                           
           } 

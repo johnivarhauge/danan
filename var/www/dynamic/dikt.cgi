@@ -21,7 +21,6 @@ if [ "$POEMCOMMAND" = "<updateList>" ]; then
     echo
     #echo "${RESPONSE}"
     echo "$BODY"
-  
 fi
 
 if [ "$POEMCOMMAND" = "<getPoem>" ]; then
@@ -33,6 +32,10 @@ if [ "$POEMCOMMAND" = "<getPoem>" ]; then
     echo "$RESPONSE"
 fi
 
-if ["$POEMCOMMAN" = "<editPoem>" ]; then
-    RESPONE=$(curl -X PUT -H "Content-Type: text/xml" -d "<dikt>$POEM</dikt>" localhost:3000/endredikt/$TITLE)
+if [ "$POEMCOMMAND" = "<editPoem>" ]; then
+    RESPONSE=$(curl -X PUT -H "Content-Type: text/xml" -d "<dikt>$POEM</dikt>" localhost:3000/endredikt/$TITLE)
+    echo "HTTP/1.1 200 OK"
+    echo "Content-type:text/html;charset=utf-8"
+    echo
+    echo $RESPONSE
 fi

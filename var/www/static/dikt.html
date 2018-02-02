@@ -43,6 +43,7 @@
                 {
                   //alert(xhr.responseText);
                   //document.getElementById('innhold').innerHTML = this.responseText;
+                  poem('list', '<updateList>', 'all');
                 }
               };
             xhr.send(kommando + "," + title + "," + dikt);
@@ -53,6 +54,7 @@
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "dikt.cgi", false);
             xhr.send(kommando + "," + title);
+            poem('list', '<updateList>', 'all');
           }
           //window.onload = updateList;
         </script>
@@ -68,13 +70,13 @@
         <input type="button" value="vis dikt" onclick="poem('innhold', '<getPoem>', getSelectedText('list'))">
         <input type="button" value="lagre endringer" onclick="createEditPoem('<editPoem>', getSelectedText('list'))">
         <input type="button" value="slett dikt" onclick="deletePoem('<deletePoem>', getSelectedText('list'))">
-        <input type="button" value="slett alle dikt" onclick="deletePoem('<deletePoems>')">
+        <input type="button" value="slett alle dikt" onclick="deletePoem('<deletePoems>'), 'all'">
         <button type="button" onclick="document.getElementById('nyttdikt').style.display='block'">opprett nytt dikt</button>
         <br>
         
         <div id="nyttdikt" style="display:none">
           Diktnavn: <input id=navn type="text" name="diktnavn"><br>
-          <input type="submit" value="lagre" align="right" onclick="createEditPoem('<savePoem>', document.getElementById('navn').value)">
+          <input type="button" value="lagre" align="right" onclick="createEditPoem('<savePoem>', document.getElementById('navn').value)">
           <input type="button" value="avbryt" onclick="document.getElementById('nyttdikt').style.display='none';document.getElementById('navn').value=''; document.getElementById('innhold').value=''">
         </div>
 

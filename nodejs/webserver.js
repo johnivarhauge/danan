@@ -136,6 +136,8 @@ restapi.post('/nyttdikt/', function(req, res){
         }
         else {
             console.log('ny bruker opprettet');
+            var xmlstring = '<?xml version="1.0"?>\n<Dikt xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + '<Status>endret</Status>' + '</Dikt>'
+            res.send(xmlstring);
         }
     });
 });
@@ -206,6 +208,8 @@ restapi.delete('/slettedikt/:diktID', function(req, res){
         }
         else {
             console.log(req.params.diktID +" slettet");
+            var xmlstring = '<?xml version="1.0"?>\n<Dikt xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + '<Status>endret</Status>' + '</Dikt>'
+            res.send(xmlstring);
         }
     });
 });
@@ -218,6 +222,8 @@ restapi.delete('/slettealledikt/', function(req, res){
         }
         else {
             console.log("alle dikt slettet");
+            var xmlstring = '<?xml version="1.0"?>\n<Dikt xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + '<Status>endret</Status>' + '</Dikt>'
+            res.send(xmlstring);
         }
     });
 });

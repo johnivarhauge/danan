@@ -23,6 +23,14 @@ if [ "$POEMCOMMAND" = "<updateList>" ]; then
     echo "$BODY"
 fi
 
+if [ "$POEMCOMMAND" = "<savePoem>" ]; then
+    RESPONSE=$(curl -X POST -H "Content-Type: text/xml" -d "<diktID>$TITLE</diktID><dikt>$POEM</dikt>" localhost:3000/nyttdikt/)
+    echo "HTTP/1.1 200 OK"
+    echo "Content-type:text/html;charset=utf-8"
+    echo
+    echo $RESPONSE
+fi
+
 if [ "$POEMCOMMAND" = "<getPoem>" ]; then
     URLTITLE=$(echo $TITLE | sed 's/ /%20/g')
     RESPONSE=$(curl --request GET localhost:3000/lesedikt/$URLTITLE | grep -oP '(?<=dikt>)[^<]+')
@@ -35,6 +43,23 @@ fi
 if [ "$POEMCOMMAND" = "<editPoem>" ]; then
     URLTITLE=$(echo $TITLE | sed 's/ /%20/g')
     RESPONSE=$(curl -X PUT -H "Content-Type: text/xml" -d "<dikt>$POEM</dikt>" localhost:3000/endredikt/$URLTITLE)
+    echo "HTTP/1.1 200 OK"
+    echo "Content-type:text/html;charset=utf-8"
+    echo
+    echo $RESPONSE
+fi
+
+if [ "$POEMCOMMAND" = "<deletePoem>" ]; then
+    URLTITLE=$(echo $TITLE | sed 's/ /%20/g')
+    RESPONSE=$(curl -X DELETE localhost:3000/slettedikt/$URLTITLE)
+    echo "HTTP/1.1 200 OK"
+    echo "Content-type:text/html;charset=utf-8"
+    echo
+    echo $RESPONSE
+fi
+
+if [ "$POEMCOMMAND" = "<deletePoems>" ]; then
+    RESPONSE=$(curl -X DELETE localhost:3000/slettealledikt/)
     echo "HTTP/1.1 200 OK"
     echo "Content-type:text/html;charset=utf-8"
     echo

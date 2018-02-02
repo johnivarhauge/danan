@@ -56,7 +56,7 @@
         <select id="list" size=5>
         </select>
         <br>
-        <input type="button" value="hent alle dikt" onclick="poem('list', '<updateList>', all)">
+        <input type="button" value="hent alle dikt" onclick="poem('list', '<updateList>')">
         <input type="button" value="vis dikt" onclick="poem('innhold', '<getPoem>', getSelectedText('list'))">
         <input type="button" value="rediger dikt" onclick="editPoem('<editPoem>', getSelectedText('list'), )">
         <input type="button" value="slett dikt" onclick="deletepoem('<deletePoem>', getSelectedText('list'))">

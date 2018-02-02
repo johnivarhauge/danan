@@ -136,6 +136,11 @@ int main ()
           setenv("QUERY_STRING", token, 1);
         }
         else {
+          char temp[strlen(filepath)];
+          strcpy(temp, filepath);
+          token = strtok(temp," ");
+          strcpy(cgipath, token);
+          
           if (strstr(tempbuf, "brukernavn") != NULL)
             setenv("QUERY_STRING", strstr(tempbuf, "brukernavn"), 1);
           //Hvis brukernavn ikke finnes, leter den etter kommando

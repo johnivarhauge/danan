@@ -33,7 +33,8 @@ if [ "$POEMCOMMAND" = "<getPoem>" ]; then
 fi
 
 if [ "$POEMCOMMAND" = "<editPoem>" ]; then
-    RESPONSE=$(curl -X PUT -H "Content-Type: text/xml" -d "<dikt>$POEM</dikt>" localhost:3000/endredikt/$TITLE)
+    URLTITLE=$(echo $TITLE | sed 's/ /%20/g')
+    RESPONSE=$(curl -X PUT -H "Content-Type: text/xml" -d "<dikt>$POEM</dikt>" localhost:3000/endredikt/$URLTITLE)
     echo "HTTP/1.1 200 OK"
     echo "Content-type:text/html;charset=utf-8"
     echo

@@ -192,6 +192,8 @@ restapi.put('/endredikt/:diktID', function(req, res){
         }
         else {
             console.log('dikt: '+req.params.diktID+" oppdatert")
+            var xmlstring = '<?xml version="1.0"?>\n<Dikt xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + '<Status>endret</Status>' + '</Dikt>'
+            res.send(xmlstring);
         }
     });
 });

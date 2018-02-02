@@ -10,11 +10,11 @@
               xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4)
                 {
-                  //alert(xhr.responseText);
-                  document.getElementById(id).innerHTML = this.responseText;
+                  alert(xhr.responseText);
+                  //document.getElementById(id).innerHTML = this.responseText;
                 }
               };
-              xhr.send(kommando + title);
+              xhr.send(kommando + " " + title);
           }
           function getSelectedText(elementId) {
             var elt = document.getElementById(elementId);
@@ -23,6 +23,18 @@
               return null;
 
             return elt.options[elt.selectedIndex].value;
+          }
+          function editPoem(kommando, title, dikt){
+            if(document.getElementById('innhold') == ""){
+              alert('et dikt har ikke blitt valgt');
+              return null;
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "dikt.cgi?brukernavn=djkdsf&passord=jkdskdkjn", false);
+            var myText = document.getElementById('innhold').value;
+
+            xhr.send(kommando + " " + title);
+                          
           } 
           //window.onload = updateList;
         </script>
@@ -34,15 +46,15 @@
         </select>
         <br>
         <input type="button" value="hent alle dikt" onclick="poem('list', '<updateList>', all)">
-        <input type="button" value="vis dikt" onclick="poem('innhold', '<getPoem>', getSelectedText('list')">
-        <input type="button" value="rediger dikt">
-        <input type="button" value="slett dikt">
+        <input type="button" value="vis dikt" onclick="poem('innhold', '<getPoem>', getSelectedText('list'))">
+        <input type="button" value="rediger dikt" onclick="poem('<editPoem>', getSelectedText('list'), )">
+        <input type="button" value="slett dikt" onclick="">
         <button type="button" onclick="document.getElementById('nyttdikt').style.display='block'">opprett nytt dikt</button>
         <br>
         <div id="nyttdikt" style="display:none">
-        Diktnavn: <input type="text" name="diktnavn"><br>
+        Diktnavn: <input id=navn type="text" name="diktnavn"><br>
         <input type="submit" value="lagre" align="right">
-        <input type="button" value="avbryt">
+        <input type="button" value="avbryt" onclick="document.getElementById('nyttdikt').style.display='none';document.getElementById('navn').value=''; document.getElementById('innhold').value=''">
         </div>
         <textarea name="dikt" id="innhold" rows="12" cols="60" ></textarea><br>
         <script>

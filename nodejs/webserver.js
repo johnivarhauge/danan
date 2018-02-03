@@ -92,9 +92,25 @@ restapi.post('/nybruker/', function(req, res){
         }
     });
 });
-//slette en sesjon
-restapi.delete('/slettsesjon/:brukerID', function(req, res){
-    db.run("delete from Sesjon where brukerID = ?",[req.params.brukerID],function(err, row){
+//Sesjonsjekk
+//Opprette ny sesjon returnerer sesjonsid
+restapi.get('/sesjonssjekk/:sesjonsID', function(req, res){
+    db.get("SELECT count(sesjonsID) as Antall FROM Sesjon where sesjonsID = ?",[req.params.sesjonsID],function(err, row){
+        if (err){
+            console.err(err);
+            res.status(500);
+        }
+        else {
+            console.log('sesjonssjekk');
+            res.set('Content-Type', 'application/xml');
+            var xmlstring = '<?xml version="1.0"?>\n<Sesjon xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Sesjon>'
+            res.send(xmlstring);
+        }
+    });
+});
+//slette en sesjon vha sesjonsID
+restapi.delete('/slettsesjon/:sesjonsID', function(req, res){
+    db.run("delete from Sesjon where sesjonsID = ?",[req.params.sesjonsID],function(err, row){
         if (err){
             console.err(err);
             res.status(500);
@@ -102,7 +118,7 @@ restapi.delete('/slettsesjon/:brukerID', function(req, res){
         else {
             console.log('Sesjon slettet');
             res.set('Content-Type', 'application/xml');
-            var xmlstring = '<?xml version="1.0"?>\n<Sesjon xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Sesjon>'
+            var xmlstring = '<?xml version="1.0"?>\n<Sesjon xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd"><Status>vellykket</Status></Sesjon>'
             res.send(xmlstring);
             
         }
@@ -135,7 +151,7 @@ restapi.post('/nyttdikt/', function(req, res){
             res.status(500);
         }
         else {
-            console.log('ny bruker opprettet');
+            console.log('nytt dikt opprettet');
             var xmlstring = '<?xml version="1.0"?>\n<Dikt xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + '<Status>endret</Status>' + '</Dikt>'
             res.send(xmlstring);
         }
@@ -215,7 +231,7 @@ restapi.delete('/slettedikt/:diktID', function(req, res){
 });
 //Slette alle dikt
 restapi.delete('/slettealledikt/', function(req, res){
-    db.run("DELETE from Dikt",[req.params.diktID], function(err, row){
+    db.run("DELETE from Dikt", function(err, row){
         if (err){
             console.err(err);
             res.status(500);

@@ -112,8 +112,8 @@ int main ()
       strcpy(requestmethod,token);
       setenv("REQUEST_METHOD", requestmethod, 1);
       //eksporterer cookie til miljøet hvis den finnes
-      if (strstr(tempbuf, "cookie")!=NULL)
-        setenv("cookie", strstr(tempbuf, "cookie"),1);
+      if (strstr(tempbuf, "Cookie:")!=NULL)
+        setenv("COOKIE", strstr(tempbuf, "Cookie:"),1);
       //henter ut filsti
       token = strtok(NULL, " /");
       char filepath[strlen(token)]; 
@@ -161,16 +161,17 @@ int main ()
       //Gjelder for post og get med parameter
       if (strchr(filepath,'?')!=NULL && (open(fullpath, O_RDONLY) != -1) || strcmp(requestmethod, "POST")==0){
         system(fullpath);
+        
         /*
         printf("HTTP/1.1 404 NOT FOUND\n");
         printf("Content-Type: text/html\n\n");
         fd = open("var/www/static/404.html", O_RDONLY);
         //write(1, tempbuf, strlen(tempbuf));
-        write(1, fullpath, strlen(fullpath));
+        //write(1, fullpath, strlen(fullpath));
         //write(1, cgipath, strlen(cgipath));
-        system("env | grep REQUEST_METHOD");
-        system("env | grep QUERY_STRING");
-        system("env | grep cookie");
+        //system("env | grep REQUEST_METHOD");
+        //system("env | grep QUERY_STRING");
+        //system("env | grep COOKIE");
         
         //int size = lseek(fd,0,SEEK_END);
         //lseek(fd,0,0);

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 BRUKER=$(echo $QUERY_STRING | cut -f1 -d '&' | cut -f2 -d '=')
 PASSORD=$(echo $QUERY_STRING | cut -f2 -d '&' | cut -f2 -d '=')
@@ -16,7 +16,7 @@ if [ $ERBRUKER -eq 1 ]; then
         #Creates a session ID
         COOKIE=$(echo -n $BRUKER$PASSORD | md5sum | cut -f 1 -d ' ')
         #delete sesjon:
-        deleteSession=$(curl --request DELETE -H "Content-Type: text/xml" -d "<Sesjon><sesjonsID>$COOKIE</sesjonsID><brukerID>$BRUKER</brukerID></Sesjon>" http://localhost:3000/slettsesjon/$BRUKER)
+        #deleteSession=$(curl --request DELETE -H "Content-Type: text/xml" -d "<Sesjon><sesjonsID>$COOKIE</sesjonsID><brukerID>$BRUKER</brukerID></Sesjon>" http://localhost:3000/slettsesjon/$BRUKER)
         #Saves session ID to REST-Server database
         SessionStatus=$(curl --request POST -H "Content-Type: text/xml" -d "<Sesjon><sesjonsID>$COOKIE</sesjonsID><brukerID>$BRUKER</brukerID></Sesjon>" http://localhost:3000/nysesjon)
         #Sends response to client and redirects

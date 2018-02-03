@@ -56,7 +56,35 @@
             xhr.send(kommando + "," + title);
             poem('list', '<updateList>', 'all');
           }
-          //window.onload = updateList;
+          //sjekke cookie
+          function checkCookie() {
+            //xhr.responseText=undefined;
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "dikt.cgi", false);
+            xhr.onreadystatechange = function() {
+              if (xhr.readyState === 4)
+              {
+                  if (this.responseText == "NOTLOGGEDIN") 
+                  {
+                    alert("you have to log in to make changes");
+                    window.location.replace("info.html");
+                  }
+              }
+            };
+            xhr.send('<cookieCheck>');                
+          } 
+          //Logge ut
+          function logOut() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "dikt.cgi", false);
+            xhr.send('<logOut>'+',');
+            window.location.replace("info.html");                        
+          }
+
+
+          window.onload = checkCookie;
+          window.onbeforeunload = logout;
+
         </script>
   </head>
   <body>
@@ -72,6 +100,7 @@
         <input type="button" value="slett dikt" onclick="deletePoem('<deletePoem>', getSelectedText('list'))">
         <input type="button" value="slett alle dikt" onclick="deletePoem('<deletePoems>'), 'all'">
         <button type="button" onclick="document.getElementById('nyttdikt').style.display='block'">opprett nytt dikt</button>
+        <input type="button" value="Log ut" onclick="logOut()">
         <br>
         
         <div id="nyttdikt" style="display:none">

@@ -24,7 +24,7 @@ if [ $ERBRUKER -eq 1 ]; then
         echo "Content-type:text/html;charset=utf-8"
         echo "Set-Cookie: sesjonsID="$COOKIE
         echo
-        echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; http://localhost/dikt.html"></head><body></body></html>'
+        echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; http://localhost/ajax.html"></head><body></body></html>'
     #If password does not match
     else
         echo "HTTP/1.1 200 OK"
@@ -45,5 +45,5 @@ else
     echo "Content-type:text/html;charset=utf-8"
     echo "Set-Cookie: sesjonsID="$COOKIE
     echo
-    echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>User Added</title></head><body><script> window.location.href = "dikt.html";</script></body></html>'
+    echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>User Added</title></head><body><script> window.location.href = "ajax.html";</script></body></html>'
 fi

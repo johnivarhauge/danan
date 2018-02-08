@@ -25,7 +25,7 @@
         
             <div id="nyttdikt" style="display:none">
                 <label for="navn">Diktnavn:</label> <input id=navn type="text" name="diktnavn">
-                <input id="nytt" type="button" value="Lagre" align="right" onclick="createEditPoem('<savePoem>', document.getElementById('navn').value)">
+                <input id="nytt" type="button" value="Lagre" align="right" onclick="saveNewPoem(document.getElementById('innhold').value, document.getElementById('navn').value)">
                 <input id="nytt" type="button" value="Avbryt" onclick="document.getElementById('nyttdikt').style.display='none';document.getElementById('navn').value=''; document.getElementById('innhold').value=''">
             </div>
         </div>

@@ -16,6 +16,12 @@ db.serialize(function() {
     db.run("CREATE TABLE IF NOT EXISTS Sesjon (sesjonsID TEXT NOT NULL PRIMARY KEY,brukerID TEXT NOT NULL, FOREIGN KEY(brukerID) REFERENCES Bruker(brukerID))");
     db.run("CREATE TABLE IF NOT EXISTS Dikt (diktID TEXT NOT NULL PRIMARY KEY,dikt TEXT NOT NULL)");
 });
+restapi.use(function(req, res, next){
+    res.header('Access-Control-Allow-Origin', "*");
+    res.header('Access-Control-Allow-Methods', "GET, PUT, POST, DELETE");
+    res.header('Access-Control-Allow-Headers', "Content-Type");
+    next();
+})
 
 //Login service: 
 //for å sjekke om bruker finnes. 

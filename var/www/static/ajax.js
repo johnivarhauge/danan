@@ -1,3 +1,8 @@
+function loadWindow(){
+  checkCookie;
+  poem('list', '<updateList>', 'all');
+}
+
 function poem(id, kommando, title) {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "dikt.cgi", false);
@@ -43,6 +48,31 @@ function createEditPoem(kommando, title) {
   xhr.send(kommando + "," + title + "," + dikt);
                 
 } 
+
+//NY AJAX FUNKSJON
+function saveNewPoem(content, title) {
+  if(document.getElementById('innhold').value == "") {
+    alert('Tomt dikt!');
+    return null;
+  }
+  
+  var xhr = new XMLHttpRequest();
+  var dikt = document.getElementById('innhold').value;
+  //alert(title + dikt);
+  xhr.open("POST", "http://localhost:3000/nyttdikt/", true);
+  xhr.setRequestHeader("Content-type", "text/xml");
+  xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4)
+      {
+        alert("Nytt dikt opprettet");
+        //document.getElementById('innhold').innerHTML = this.responseText;
+        poem('list', '<updateList>', 'all');
+        
+      }
+    };
+  xhr.send("<diktID>"+title+"</diktID><dikt>"+content+"</dikt>");
+                
+} 
 //slett ett eller alle dikt
 function deletePoem(kommando, title) {
   var xhr = new XMLHttpRequest();
@@ -76,5 +106,5 @@ function logOut() {
 }
 
 
-window.onload = checkCookie;
+window.onload = loadWindow;
 window.onbeforeunload = logOut;

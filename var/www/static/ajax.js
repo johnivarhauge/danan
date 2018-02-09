@@ -3,6 +3,20 @@ function loadWindow(){
   poem('list', '<updateList>', 'all');
 }
 
+function showpoem(title, id){
+  var xhr = new XMLHttpRequest();
+  var url = "http://localhost:3000/lesedikt/" + title;
+  xhr.open("GET", url, true);
+  xhr.setRequestHeader("Content-Type", "text/xml");
+  xhr.onreadystatechange = function() {
+    if(xhr.readyState === 4)
+    {
+      document.getElementById(id).value = this.responseText;
+    }
+  };
+  xhr.send();
+}
+
 function poem(id, kommando, title) {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "dikt.cgi", false);

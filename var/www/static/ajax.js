@@ -29,25 +29,6 @@ function getSelectedText(elementId) {
   return elt.options[elt.selectedIndex].value;
 }
 
-function createEditPoem(kommando, title) {
-  if(document.getElementById('innhold') == "") {
-    alert('et dikt har ikke blitt valgt');
-    return null;
-  }
-  var xhr = new XMLHttpRequest();
-  var dikt = document.getElementById('innhold').value;
-  xhr.open("POST", "dikt.cgi", false);
-  xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4)
-      {
-        //alert(xhr.responseText);
-        //document.getElementById('innhold').innerHTML = this.responseText;
-        poem('list', '<updateList>', 'all');
-      }
-    };
-  xhr.send(kommando + "," + title + "," + dikt);
-                
-}
 //NY AJAX FUNKSJON
 function editPoem(content, title) {
   if(document.getElementById('innhold').value == "") {
@@ -59,7 +40,7 @@ function editPoem(content, title) {
   var url = "http://localhost:3000/endredikt/" + title;
   alert(url);
   xhr.open("PUT", url, false);
-  xhr.setRequestHeader("Content-Type", "test/xml");
+  xhr.setRequestHeader("Content-Type", "text/xml");
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 4)
     {
@@ -71,7 +52,7 @@ function editPoem(content, title) {
   xhr.send("<dikt>"+content+"</dikt>");
 } 
 
-//NY AJAX FUNKSJON
+//NY AJAX FUNKSJON (MÅ ENDRE UPDATELIST FUNKSJON)
 function saveNewPoem(content, title) {
   if(document.getElementById('innhold').value == "") {
     alert('Tomt dikt!');
@@ -95,13 +76,24 @@ function saveNewPoem(content, title) {
   xhr.send("<diktID>"+title+"</diktID><dikt>"+content+"</dikt>");
                 
 } 
-//slett ett eller alle dikt
-function deletePoem(kommando, title) {
+
+//NY AJAX FUNKSJON (MÅ LEGGE TIL UPDATELIST)
+function deleteAllPoems() {
+  
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "dikt.cgi", false);
-  xhr.send(kommando + "," + title);
-  poem('list', '<updateList>', 'all');
-}
+  var url = "http://localhost:3000/slettealledikt/";
+  xhr.open("DELETE", url, true);
+  xhr.setRequestHeader("Content-Type", "text/xml");
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4)
+    {
+      //Må ha med "updateList når den er laget!!!"     
+    }
+  };
+  
+  xhr.send("");
+} 
+
 //sjekke cookie
 function checkCookie() {
   //xhr.responseText=undefined;

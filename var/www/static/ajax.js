@@ -1,6 +1,6 @@
 function loadWindow(){
   checkCookie;
-  poem('list', '<updateList>', 'all');
+  updateList();
 }
 
 function poem(id, kommando, title) {
@@ -29,7 +29,7 @@ function getSelectedText(elementId) {
   return elt.options[elt.selectedIndex].value;
 }
 //NY AJAX FUNKSJON 
-function updateList(id) {
+function updateList() {
   
   var xhr = new XMLHttpRequest();
   var url = "http://localhost:3000/leseallediktnavn/";
@@ -40,12 +40,19 @@ function updateList(id) {
     {
       var xml = xhr.responseXML;
       var diktNavn = xml.getElementsByTagName("diktID");
-      alert(xml.getElementsByTagName("diktID"));
-      //document.getElementById(id).innerHTML = this.responseText;    
+    
+      list = document.getElementById('list');
+      var options = "";
+   
+      for (i = 0; i < diktNavn.length; i++){
+        options += "<option>"+ diktNavn[i].textContent + "</option>"
+      } 
+      list.innerHTML = options;
+
     }
   };
   
-  xhr.send("");
+  xhr.send(null);
 } 
 
 //NY AJAX FUNKSJON
@@ -58,7 +65,7 @@ function editPoem(content, title) {
   var xhr = new XMLHttpRequest();
   var url = "http://localhost:3000/endredikt/" + title;
   alert(url);
-  xhr.open("PUT", url, false);
+  xhr.open("PUT", url, true);
   xhr.setRequestHeader("Content-Type", "text/xml");
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 4)
@@ -71,7 +78,7 @@ function editPoem(content, title) {
   xhr.send("<dikt>"+content+"</dikt>");
 } 
 
-//NY AJAX FUNKSJON (MÅ ENDRE UPDATELIST FUNKSJON)
+//NY AJAX FUNKSJON
 function saveNewPoem(content, title) {
   if(document.getElementById('innhold').value == "") {
     alert('Tomt dikt!');
@@ -88,7 +95,7 @@ function saveNewPoem(content, title) {
       {
         alert("Nytt dikt opprettet");
         //document.getElementById('innhold').innerHTML = this.responseText;
-        poem('list', '<updateList>', 'all');
+        updateList();
         
       }
     };
@@ -107,13 +114,13 @@ function deleteOnePoem(title) {
   if (xhr.readyState === 4)
   {
     alert("Dikt slettet");
-    poem('list', '<updateList>', 'all');
+    updateList();
     }
   };
   xhr.send();
 }
 
-//NY AJAX FUNKSJON (MÅ LEGGE TIL UPDATELIST)
+//NY AJAX FUNKSJON
 function deleteAllPoems() {
   
   var xhr = new XMLHttpRequest();
@@ -123,12 +130,29 @@ function deleteAllPoems() {
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 4)
     {
-      //Må ha med "updateList når den er laget!!!"     
+      updateList();   
     }
   };
   
   xhr.send("");
 } 
+
+//NY AJAX FUNKSJON
+function showPoem(title, id){
+  var xhr = new XMLHttpRequest();
+  var url = "http://localhost:3000/lesedikt/" + title;
+  xhr.open("GET", url, true);
+  xhr.setRequestHeader("Content-Type", "text/xml");
+  xhr.onreadystatechange = function() {
+    if(xhr.readyState === 4)
+    {
+      var xml = xhr.responseXML;
+      var dikt = xml.getElementsByTagName("dikt");
+      document.getElementById(id).value = dikt[0].textContent;
+    }
+  };
+  xhr.send("");
+}
 
 //sjekke cookie
 function checkCookie() {
@@ -154,7 +178,20 @@ function logOut() {
   xhr.send('<logOut>'+',');
   window.location.replace("info.html");                        
 }
+/*
+// Get the input field
+var search = document.getElementById("searchField");
 
+// Execute a function when the user releases a key on the keyboard
+search.addEventListener("keyup", function(event) {
+  // Cancel the default action, if needed
+  event.preventDefault();
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode === 13) {
+    // Trigger the button element with a click
+    document.getElementById("searchButton").click();
+  }
+});*/
 
 window.onload = loadWindow;
 window.onbeforeunload = logOut;

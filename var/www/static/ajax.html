@@ -11,8 +11,8 @@
     <form action=>
         <!-- listen skal kunne ta imot navn fra db-->
         <div id="flex">
-            <input type="button" value="Hent alle dikt" onclick="updateList('list')"><br>
-            <input type="button" value="Vis dikt" onclick="poem('innhold', '<getPoem>', getSelectedText('list'))"><br>
+            <input type="button" value="Hent alle dikt" onclick="updateList"><br>
+            <input type="button" value="Vis dikt" onclick="showPoem(getSelectedText('list') ,'innhold')"><br>
             <input type="button" value="Lagre endringer" onclick="editPoem(document.getElementById('innhold').value, getSelectedText('list'))"><br>
             <input type="button" value="Slett dikt" onclick="deleteOnePoem(getSelectedText('list'))"><br>
             <input type="button" value="Slett alle dikt" onclick="deleteAllPoems()"><br>
@@ -20,6 +20,8 @@
             <input type="button" value="Logg ut" onclick="logOut()">
         </div>
         <div id="flex">
+                <input id="searchField" type="search" placeholder="Søk etter dikt" onKeyDown="javascript: if (event.keyCode==13)showPoem(document.getElementById('searchField').value, 'innhold');">
+                <input id="searchButton" type="button" value="Søk" onclick="showPoem(document.getElementById('searchField').value, 'innhold')"><br>
             <select id="list" size="12"></select>
             <textarea name="dikt" id="innhold" rows="12" cols="60" ></textarea>
         

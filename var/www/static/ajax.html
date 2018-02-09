@@ -12,7 +12,7 @@
         <!-- listen skal kunne ta imot navn fra db-->
         <div id="flex">
             <input type="button" value="Hent alle dikt" onclick="updateList('list')"><br>
-            <input type="button" value="Vis dikt" onclick="poem('innhold', '<getPoem>', getSelectedText('list'))"><br>
+            <input type="button" value="Vis dikt" onclick="showpoem(getSelectedText('list'), 'innhold')"><br>
             <input type="button" value="Lagre endringer" onclick="editPoem(document.getElementById('innhold').value, getSelectedText('list'))"><br>
             <input type="button" value="Slett dikt" onclick="deleteOnePoem(getSelectedText('list'))"><br>
             <input type="button" value="Slett alle dikt" onclick="deleteAllPoems()"><br>

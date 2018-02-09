@@ -191,6 +191,20 @@ restapi.get('/lesealledikt/', function(req, res){
         }
     });
 });
+//Lese ut alle diktnavn
+restapi.get('/leseallediktnavn/', function(req, res){
+    db.all("Select diktID from Dikt", function(err, row){
+        if (err){
+            console.err(err);
+            res.status(500);
+        }
+        else {
+            res.set('Content-Type', 'application/xml');
+            var xmlstring = '<?xml version="1.0"?>\n<Dikt xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + jsontoxml(row) + '</Dikt>'
+            res.send(xmlstring);
+        }
+    });
+});
 //Finne antall dikt i tabellen
 restapi.get('/antalldikt/', function(req, res){
     db.get("SELECT count(diktID) as Antall FROM Dikt", function(err, row){

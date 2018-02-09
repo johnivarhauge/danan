@@ -28,6 +28,25 @@ function getSelectedText(elementId) {
 
   return elt.options[elt.selectedIndex].value;
 }
+//NY AJAX FUNKSJON 
+function updateList(id) {
+  
+  var xhr = new XMLHttpRequest();
+  var url = "http://localhost:3000/leseallediktnavn/";
+  xhr.open("GET", url, true);
+  xhr.setRequestHeader("Content-Type", "text/xml");
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4)
+    {
+      var xml = xhr.responseXML;
+      var diktNavn = xml.getElementsByTagName("diktID");
+      alert(xml.getElementsByTagName("diktID"));
+      //document.getElementById(id).innerHTML = this.responseText;    
+    }
+  };
+  
+  xhr.send("");
+} 
 
 //NY AJAX FUNKSJON
 function editPoem(content, title) {
@@ -76,6 +95,23 @@ function saveNewPoem(content, title) {
   xhr.send("<diktID>"+title+"</diktID><dikt>"+content+"</dikt>");
                 
 } 
+
+//NY AJAX FUNKSJON
+function deleteOnePoem(title) {
+  var xhr = new XMLHttpRequest();
+  var url = "http://localhost:3000/slettedikt/" + title;
+  alert(url);
+  xhr.open("DELETE", url, true);
+  xhr.setRequestHeader("Content-Type", "text/xml");
+  xhr.onreadystatechange = function() {
+  if (xhr.readyState === 4)
+  {
+    alert("Dikt slettet");
+    poem('list', '<updateList>', 'all');
+    }
+  };
+  xhr.send();
+}
 
 //NY AJAX FUNKSJON (MÅ LEGGE TIL UPDATELIST)
 function deleteAllPoems() {

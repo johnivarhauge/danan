@@ -47,6 +47,28 @@ function createEditPoem(kommando, title) {
     };
   xhr.send(kommando + "," + title + "," + dikt);
                 
+}
+//NY AJAX FUNKSJON
+function editPoem(content, title) {
+  if(document.getElementById('innhold').value == "") {
+    alert('Tomt dikt!');
+    return null;
+  }
+
+  var xhr = new XMLHttpRequest();
+  var url = "http://localhost:3000/endredikt/" + title;
+  alert(url);
+  xhr.open("PUT", url, false);
+  xhr.setRequestHeader("Content-Type", "test/xml");
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4)
+    {
+      alert(content + xhr.status);
+      //document.getElementById('innhold').innerHTML = this.responseText;      
+    }
+  };
+  
+  xhr.send("<dikt>"+content+"</dikt>");
 } 
 
 //NY AJAX FUNKSJON

@@ -13,7 +13,7 @@
         <div id="flex">
             <input type="button" value="Hent alle dikt" onclick="poem('list', '<updateList>', 'all')"><br>
             <input type="button" value="Vis dikt" onclick="poem('innhold', '<getPoem>', getSelectedText('list'))"><br>
-            <input type="button" value="Lagre endringer" onclick="createEditPoem('<editPoem>', getSelectedText('list'))"><br>
+            <input type="button" value="Lagre endringer" onclick="editPoem(document.getElementById('innhold').value, getSelectedText('list'))"><br>
             <input type="button" value="Slett dikt" onclick="deletePoem('<deletePoem>', getSelectedText('list'))"><br>
             <input type="button" value="Slett alle dikt" onclick="deletePoem('<deletePoems>'), 'all'"><br>
             <button type="button" onclick="document.getElementById('nyttdikt').style.display='block'">Opprett nytt dikt</button><br>

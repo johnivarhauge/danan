@@ -1,0 +1,15 @@
+For å bygge fra et image:
+
+sudo docker build -t DITTNAVN/ImageNavn .
+
+For å kjøre container:
+
+sudo docker run -i -p 80:80 DITTNAVN/ImageNavn
+
+For å fjerne og avslutte container;
+
+sudo docker rm -f ID
+
+For å se alle containere som finnes:
+
+sudo docker ps -a

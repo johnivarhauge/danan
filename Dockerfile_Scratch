@@ -1,6 +1,6 @@
 #Using Minimal Docker Image
-FROM busybox
-
+FROM scratch
+ADD busybox.tar.xz /
 #Each COPY command will add a new Image Layer
 COPY var/ /var/
 COPY a.out /webtjener

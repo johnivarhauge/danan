@@ -23,6 +23,9 @@ if [ $ERBRUKER -eq 1 ]; then
         echo "HTTP/1.1 200 OK"
         echo "Content-type:text/html;charset=utf-8"
         echo "Set-Cookie: sesjonsID="$COOKIE
+        #echo "Access-Control-Allow-Origin: *"
+        #echo "Access-Control-Allow-Methods: GET, POST, PUT, DELETE"
+        #echo "Access-Control-Allow-Headers: Content-type"
         echo
         echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; http://localhost/ajax.html"></head><body></body></html>'
     #If password does not match
@@ -44,6 +47,9 @@ else
     echo "HTTP/1.1 200 OK"
     echo "Content-type:text/html;charset=utf-8"
     echo "Set-Cookie: sesjonsID="$COOKIE
+    #echo "Access-Control-Allow-Origin: *"
+    #echo "Access-Control-Allow-Methods: GET, POST, PUT, DELETE"
+    #echo "Access-Control-Allow-Headers: Content-type"
     echo
     echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>User Added</title></head><body><script> window.location.href = "ajax.html";</script></body></html>'
 fi

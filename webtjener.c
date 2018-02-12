@@ -104,6 +104,7 @@ int main ()
       //Setter UID og GID slik at prosessen kan kjøre uavhengig av foreldre, gir fra seg rot-privilegie
       int setuid(uid_t uid);
       int setgid(gid_t gid);
+      int validType = 0; //Brukes for å sjekke om filtype støttes
 
       read(0, buf, sizeof(buf)-1); //leser til buffer fra socket
       strcpy(tempbuf, buf);  //Kopierer innholdet i buf til tempbuf
@@ -157,6 +158,7 @@ int main ()
       char fullpath[18 + strlen(filepath)]; //Lager variabel 
       strcpy(fullpath, root_dir); //Kopierer rotstien til fullpath
       
+
       //Bygger filsti for alle filer som ikke er get med parameter eller post
       if (strchr(filepath,'?')==NULL && strcmp(requestmethod, "POST")!=0) //Hvis det ikke er GET med parametre, eller POST
         strcat(fullpath, filepath); //Kopierer filnavn til fullpath
@@ -190,33 +192,53 @@ int main ()
           char filetype[strlen(token)];
           strcpy(filetype,token);
 
-          printf("HTTP/1.1 200 OK\n");
-          if (strcmp(filetype, "png")==0) {
-            printf("Content-Type: image/png\n\n");
-          }
-          else if( strcmp(filetype, "xml")==0) {
-            printf("Content-Type: application/xml\n\n");
-          }
-          else if( strcmp(filetype, "html")==0) {
-            printf("Content-Type: text/html\n\n");
-          }
-          else if( strcmp(filetype, "htm")==0) {
-            printf("Content-Type: text/html\n\n");
-          }
-          else if( strcmp(filetype, "xsl")==0) {
-            printf("Content-Type: application/xslt+xml\n\n");
-          }
-          else if( strcmp(filetype, "css")==0) {
-            printf("Content-Type: text/css\n\n");
-          }
-          else {
-            printf("Content-Type: text/plain\n\n");
+          if (strcmp(filetype, "asis")!=0){
+        
+            if (strcmp(filetype, "png")==0) {
+              printf("HTTP/1.1 200 OK\n");
+              printf("Content-Type: image/png\n\n");
+            }
+            else if( strcmp(filetype, "xml")==0) {
+              printf("HTTP/1.1 200 OK\n");
+              printf("Content-Type: application/xml\n\n");
+            }
+            else if( strcmp(filetype, "html")==0) {
+              printf("HTTP/1.1 200 OK\n");
+              printf("Content-Type: text/html\n\n");
+            }
+            else if( strcmp(filetype, "htm")==0) {
+              printf("HTTP/1.1 200 OK\n");
+              printf("Content-Type: text/html\n\n");
+            }
+            else if( strcmp(filetype, "xsl")==0) {
+              printf("HTTP/1.1 200 OK\n");
+              printf("Content-Type: application/xslt+xml\n\n");
+            }
+            else if( strcmp(filetype, "css")==0) {
+              printf("HTTP/1.1 200 OK\n");
+              printf("Content-Type: text/css\n\n");
+            }
+            else if( strcmp(filetype, "gif")==0) {
+              printf("HTTP/1.1 200 OK\n");
+              printf("Content-Type: image/gif\n\n");
+            }
+            else {
+              /*printf("HTTP/1.1 404 NOT FOUND\n");
+              printf("Content-Type: text/html\n\n");
+              printf("The File type of the request is unsupported\n");*/
+              printf("HTTP/1.1 415 Unsupported Media Type\n");
+              printf("Content-Type: text/plain; charset=utf-8\n\n");
+              printf("The File type of the request is unsupported\n"); 
+              validType = 1;
+            }
           }
         }
       
-        int size = lseek(fd,0,SEEK_END); //Finner størrelse til filen som skal leveres
-        lseek(fd,0,0); //Setter pekeren tilbake til starten av filen
-        sendfile(ny_sd, fd, NULL, size); //Sender filen direkte til socketen
+        if(validType == 0){
+          int size = lseek(fd,0,SEEK_END); //Finner størrelse til filen som skal leveres
+          lseek(fd,0,0); //Setter pekeren tilbake til starten av filen
+          sendfile(ny_sd, fd, NULL, size); //Sender filen direkte til socketen
+        }
       }
       // Sørger for å stenge socket for skriving og lesing
       // NB! Frigjør ingen plass i fildeskriptortabellen

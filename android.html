@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Dikt (AJAX)</title>
+    <link rel="stylesheet" type="text/css" href="android.css">
+    <script src="android.js"></script>
+
+</head>
+<body>
+<form action=>
+    <!-- listen skal kunne ta imot navn fra db-->
+    <div id="flex">
+        <input type="button" value="Hent alle dikt" onclick="updateList"><br>
+        <input type="button" value="Vis dikt" onclick="showPoem(getSelectedText('list') ,'innhold')"><br>
+        <input type="button" value="Lagre endringer" onclick="editPoem(document.getElementById('innhold').value, getSelectedText('list'))"><br>
+        <input type="button" value="Slett dikt" onclick="deleteOnePoem(getSelectedText('list'))"><br>
+        <input type="button" value="Slett alle dikt" onclick="deleteAllPoems()"><br>
+        <button type="button" onclick="document.getElementById('nyttdikt').style.display='block'">Opprett nytt dikt</button><br>
+        <input type="button" value="Logg ut" onclick="logOut()">
+    </div>
+    <div id="flex">
+        <input id="searchField" type="search" placeholder="Søk etter dikt" onKeyDown="javascript: if (event.keyCode==13)showPoem(document.getElementById('searchField').value, 'innhold');">
+        <input id="searchButton" type="button" value="Søk" onclick="showPoem(document.getElementById('searchField').value, 'innhold')"><br>
+        <select id="list" size="12"></select>
+        <textarea name="dikt" id="innhold" rows="12" cols="60" ></textarea>
+
+        <div id="nyttdikt" style="display:none">
+            <label for="navn">Diktnavn:</label> <input id=navn type="text" name="diktnavn">
+            <input id="nytt" type="button" value="Lagre" align="right" onclick="saveNewPoem(document.getElementById('innhold').value, document.getElementById('navn').value)">
+            <input id="nytt" type="button" value="Avbryt" onclick="document.getElementById('nyttdikt').style.display='none';document.getElementById('navn').value=''; document.getElementById('innhold').value=''">
+        </div>
+    </div>
+
+</form>
+
+</body>
+
+</html>

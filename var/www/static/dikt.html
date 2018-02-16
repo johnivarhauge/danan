@@ -67,7 +67,7 @@
                   if (this.responseText == "NOTLOGGEDIN") 
                   {
                     alert("you have to log in to make changes");
-                    window.location.replace("info.html");
+                    window.location.replace("login.html");
                   }
               }
             };
@@ -78,7 +78,7 @@
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "dikt.cgi", false);
             xhr.send('<logOut>'+',');
-            window.location.replace("info.html");                        
+            window.location.replace("login.html");                        
           }
 
 

@@ -222,6 +222,10 @@ int main ()
               printf("HTTP/1.1 200 OK\n");
               printf("Content-Type: image/gif\n\n");
             }
+            else if( strcmp(filetype, "js")==0) {
+              printf("HTTP/1.1 200 OK\n");
+              printf("Content-Type: application/javascript\n\n");
+            }
             else {
               /*printf("HTTP/1.1 404 NOT FOUND\n");
               printf("Content-Type: text/html\n\n");

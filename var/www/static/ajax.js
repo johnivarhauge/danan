@@ -5,7 +5,7 @@ function loadWindow(){
 
 function showpoem(title, id){
   var xhr = new XMLHttpRequest();
-  var url = "http://localhost:3000/lesedikt/" + title;
+  var url = "http://192.168.56.101:3000/lesedikt/" + title;
   xhr.open("GET", url, true);
   xhr.setRequestHeader("Content-Type", "text/xml");
   xhr.onreadystatechange = function() {
@@ -46,7 +46,7 @@ function getSelectedText(elementId) {
 function updateList() {
   
   var xhr = new XMLHttpRequest();
-  var url = "http://localhost:3000/leseallediktnavn/";
+  var url = "http://192.168.56.101:3000/leseallediktnavn/";
   xhr.open("GET", url, true);
   xhr.setRequestHeader("Content-Type", "text/xml");
   xhr.onreadystatechange = function() {
@@ -77,7 +77,7 @@ function editPoem(content, title) {
   }
 
   var xhr = new XMLHttpRequest();
-  var url = "http://localhost:3000/endredikt/" + title;
+  var url = "http://192.168.56.101:3000/endredikt/" + title;
   alert(url);
   xhr.open("PUT", url, true);
   xhr.setRequestHeader("Content-Type", "text/xml");
@@ -102,7 +102,7 @@ function saveNewPoem(content, title) {
   var xhr = new XMLHttpRequest();
   var dikt = document.getElementById('innhold').value;
   //alert(title + dikt);
-  xhr.open("POST", "http://localhost:3000/nyttdikt/", true);
+  xhr.open("POST", "http://192.168.56.101:3000/nyttdikt/", true);
   xhr.setRequestHeader("Content-type", "text/xml");
   xhr.onreadystatechange = function() {
       if (xhr.readyState === 4)
@@ -120,7 +120,7 @@ function saveNewPoem(content, title) {
 //NY AJAX FUNKSJON
 function deleteOnePoem(title) {
   var xhr = new XMLHttpRequest();
-  var url = "http://localhost:3000/slettedikt/" + title;
+  var url = "http://192.168.56.101:3000/slettedikt/" + title;
   alert(url);
   xhr.open("DELETE", url, true);
   xhr.setRequestHeader("Content-Type", "text/xml");
@@ -138,7 +138,7 @@ function deleteOnePoem(title) {
 function deleteAllPoems() {
   
   var xhr = new XMLHttpRequest();
-  var url = "http://localhost:3000/slettealledikt/";
+  var url = "http://192.168.56.101:3000/slettealledikt/";
   xhr.open("DELETE", url, true);
   xhr.setRequestHeader("Content-Type", "text/xml");
   xhr.onreadystatechange = function() {
@@ -154,7 +154,7 @@ function deleteAllPoems() {
 //NY AJAX FUNKSJON
 function showPoem(title, id){
   var xhr = new XMLHttpRequest();
-  var url = "http://localhost:3000/lesedikt/" + title;
+  var url = "http://192.168.56.101:3000/lesedikt/" + title;
   xhr.open("GET", url, true);
   xhr.setRequestHeader("Content-Type", "text/xml");
   xhr.onreadystatechange = function() {
@@ -172,14 +172,14 @@ function showPoem(title, id){
 function checkCookie() {
   //xhr.responseText=undefined;
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "dikt.cgi", false);
+  xhr.open("POST", "http://192.168.56.101/dikt.cgi", false);
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 4)
     {
         if (this.responseText == "NOTLOGGEDIN") 
         {
           alert("you have to log in to make changes");
-          window.location.replace("info.html");
+          window.location.replace("login.html");
         }
     }
   };
@@ -188,9 +188,9 @@ function checkCookie() {
 //Logge ut
 function logOut() {
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "dikt.cgi", false);
+  xhr.open("POST", "http://192.168.56.101/dikt.cgi", false);
   xhr.send('<logOut>'+',');
-  window.location.replace("info.html");                        
+  window.location.replace("login.html");                        
 }
 /*
 // Get the input field

@@ -179,7 +179,7 @@ function checkCookie() {
         if (this.responseText == "NOTLOGGEDIN") 
         {
           alert("you have to log in to make changes");
-          window.location.replace("login.html");
+          window.location.replace("loginAJAX.html");
         }
     }
   };
@@ -190,7 +190,7 @@ function logOut() {
   var xhr = new XMLHttpRequest();
   xhr.open("POST", "http://192.168.56.101/dikt.cgi", false);
   xhr.send('<logOut>'+',');
-  window.location.replace("login.html");                        
+  window.location.replace("loginAJAX.html");                        
 }
 /*
 // Get the input field

@@ -5,5 +5,7 @@ RUN apk add --update sqlite
 COPY var/ /var/
 COPY a.out /webtjener
 COPY info.db /
+COPY entrypoint.sh /
 EXPOSE 80
-CMD ["/bin/sh"]
+
+ENTRYPOINT ["/entrypoint.sh"]

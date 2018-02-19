@@ -207,5 +207,5 @@ search.addEventListener("keyup", function(event) {
   }
 });*/
 
-window.onload = loadWindow;
+window.onload = loadWindow();
 window.onbeforeunload = logOut;

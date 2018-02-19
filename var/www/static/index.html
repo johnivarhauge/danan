@@ -5,14 +5,18 @@
     <Title>KAJA Index</Title>
 
     <style>
+        html {
+            font-family: sans-serif;
+        }
+
         a:link {
-            color: green;
+            color: rgb(23, 0, 128);
             background-color: transparent;
             text-decoration: none;
         }
 
         a:visited {
-            color: pink;
+            color: rgb(0, 141, 0);
             background-color: transparent;
             text-decoration: none;
         }
@@ -33,21 +37,26 @@
 <body>
     <h1>KAJAweb</h1>
     <p>Index of KAJAweb</p>
+    <hr>
     <h2>Meny:</h2>
     <ul>
-        <li><a href="dikt.html">Dikt-tjeneste (CGI)</a></li>
-        <li><a href="ajax.html">Dikt-tjeneste (AJAX)</a></li>
+        <li><a href="loginCGI.html">Dikt-tjeneste (CGI)</a></li>
+        <li><a href="loginAJAX.html">Dikt-tjeneste (AJAX)</a></li>
         <li>Last ned Android app</li>
     </ul>
+    <hr>
     <button type="button" onclick="document.getElementById('testLinker').style.display='block'">Vis test-linker</button>
     <div id="testLinker" style="display:none">
         <p> Klikk på linkene for å se hva som skjer ;) </p>
-        <p><a href="asis.asis">Test for Asis filer </a></p>
-        <p><a href="space2.png">Test for PNG filer </a></p>
-        <p><a href="deltagere.xml">Test for XML filer </a></p>
-        <p><a href="deltagere2.xsl">Test for XSL filer </a></p>
-        <p><a href="deltagere.css">Test for CSS filer </a></p>
-        <p><a href="test.abc">Test for filer som ikke støttes </a></p>
+        <ul>
+            <li><a href="asis.asis">Test for Asis filer </a></li>
+            <li><a href="space2.png">Test for PNG filer </a></li>
+            <li><a href="deltagere.xml">Test for XML filer </a></li>
+            <li><a href="deltagere2.xsl">Test for XSL filer </a></li>
+            <li><a href="deltagere.css">Test for CSS filer </a></li>
+            <li><a href="test.abc">Test for filer som ikke støttes </a></li>
+        </ul>
+        <button type="button" onclick="document.getElementById('testLinker').style.display='none'">Skjul</button>
     </div>
 </body>
 </html>

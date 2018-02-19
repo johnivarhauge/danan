@@ -1,15 +1,29 @@
-For å bygge fra et image:
+Bygge fra et image:
+"sudo docker build -t DITTNAVN/ImageNavn ."
 
-sudo docker build -t DITTNAVN/ImageNavn .
+List opp alle images:
+"sudo docker images"
 
-For å kjøre container:
+Kjøre container:
+"sudo docker run -i -p 80:80 DITTNAVN/ImageNavn"
 
-sudo docker run -i -p 80:80 DITTNAVN/ImageNavn
+Fjerne og avslutte container;
+"sudo docker rm -f ID"
 
-For å fjerne og avslutte container;
+Se alle containere som finnes:
+"sudo docker ps -a"
 
-sudo docker rm -f ID
+Initialisere swarm:
+"sudo docker swarm init"
 
-For å se alle containere som finnes:
+Lage en swarm/stack baser på docker-compose.yml (Må være i samme mappe som yml filen):
+"sudo docker stack deploy -c docker-compose.yml NAVN" (docker swarm init må kjøres først!!)
 
-sudo docker ps -a
+Liste opp services og kjørende containere:
+"sudo docker service ls"
+
+Avslutte alle servicer/containere i en stack/swarm:
+"sudo docker stack rm NAVN"
+
+Avslutte en swarm som maskinen din er en del av:
+"sudo docker swarm leave --force"

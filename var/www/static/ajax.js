@@ -1,8 +1,19 @@
 function loadWindow(){
+  checkBrowser();
   checkCookie;
   updateList();
 }
 
+function checkBrowser(){
+  var ua = navigator.userAgent.toLowerCase();
+  var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+  if(isAndroid) {
+  // Do something!
+  // Redirect to Android-site?
+  document.location = "file:///android_asset/dikt.html";
+  //AndroidInterface.showToast("Kridtian");
+  }
+}
 function showpoem(title, id){
   var xhr = new XMLHttpRequest();
   var url = "http://192.168.56.101:3000/lesedikt/" + title;

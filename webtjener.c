@@ -117,6 +117,10 @@ int main ()
       //eksporterer cookie til miljøet hvis den finnes
       if (strstr(tempbuf, "Cookie:")!=NULL) //strstr leter etter første forekomst av "Cookie:" 
         setenv("COOKIE", strstr(tempbuf, "Cookie:"),1); //Kopierer fra og med "Cookie:", og setter det til COOKIE miljøvariabel, og eksporterer
+      
+      //eksporterer cookie til miljøet hvis den finnes
+      if (strstr(tempbuf, "webview")!=NULL) //strstr leter etter første forekomst av "webview" 
+        setenv("WEBVIEW", strstr(tempbuf, "Webview"),1); //Kopierer fra og med "webview", og setter det til WEBVIEW miljøvariabel, og eksporterer
 
       //henter ut filsti
       token = strtok(NULL, " /"); //Henter ut alt etter request metode fra "buf" frem til " /" (altså filsti), og setter det til "token"
@@ -168,6 +172,13 @@ int main ()
       //Gjelder for post og get med parameter
       if (strchr(filepath,'?')!=NULL && (open(fullpath, O_RDONLY) != -1) || strcmp(requestmethod, "POST")==0){
         system(fullpath);
+
+        /*
+        printf("HTTP/1.1 404 NOT FOUND\n");
+        printf("Content-Type: text/html\n\n");
+        fd = open("var/www/static/404.html", O_RDONLY);
+        printf("%s",tempbuf);
+        */
       }
 
       //For alle andre filtyper

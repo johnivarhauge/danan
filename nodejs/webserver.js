@@ -5,6 +5,7 @@ var express = require('express');
 var restapi = express();
 var jsontoxml = require('jsontoxml');
 var String = require('string');
+var md5 = require('md5');
 
 var bodyParser = require('body-parser');
 restapi.use(bodyParser.text({ type: 'text/xml' }));
@@ -264,6 +265,52 @@ restapi.delete('/slettealledikt/', function(req, res){
     });
 });
 
+restapi.post('/androidLogin/', function(req, res){
+    var loginID = String(req.body).between('=','&').s;
+    var password = String(req.body).between('=',' ').s;
+    var hashpassword = md5(password);
+    var cookie = md5(loginID + password);
+    console.log(req.body);
+
+    console.log("brukernavn = " + loginID + "passord = " + password);
+    
+    db.serialize(function() {
+        db.run("SELECT passord FROM Bruker where brukerID = ?",[loginID], function(err, row){
+            if (err){
+                //console.err(err);
+                res.status(500);
+            }
+            else {
+                //console.log("alle dikt slettet");
+                if(String(row).between('>','<').s === hashpassword){
+                    //var xmlstring = '<?xml version="1.0"?>\n<Dikt xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + '<Status>endret</Status>' + '</Dikt>'
+                    var htmlstring = '<script>window.open("file:///android_asset/dikt.html")</script>'
+                    //res.send(xmlstring);
+                    res.send(htmlstring);
+                }
+                else{
+                    //var xmlstring = '<?xml version="1.0"?>\n<Dikt xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + '<Status>endret</Status>' + '</Dikt>'
+                    var htmlstring = '<script>window.open("file:///android_asset/index.html")</script>'
+                    //res.send(xmlstring);
+                    res.send(htmlstring);
+                }
+            }
+        });
+        db.run("INSERT INTO Sesjon(sesjonsID, brukerID) VALUES(?, ?)",[cookie, loginID],function(err, row){
+            if (err){
+                console.err(err);
+                res.status(500);
+            }
+            else {
+                console.log('ny sesjon opprettet');
+                //res.set('Content-Type', 'application/xml');
+                //var xmlstring = '<?xml version="1.0"?>\n<Sesjon xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd"> ny sesjon opprettet</Sesjon>'
+                //var htmlstring = 
+                //res.send(xmlstring);
+            }
+        });
+    });
+});
 
 
 restapi.listen(3000);

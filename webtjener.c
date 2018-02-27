@@ -173,12 +173,12 @@ int main ()
       if (strchr(filepath,'?')!=NULL && (open(fullpath, O_RDONLY) != -1) || strcmp(requestmethod, "POST")==0){
         //system(fullpath);
 
-               
+        /*       
         printf("HTTP/1.1 404 NOT FOUND\n");
         printf("Content-Type: text/html\n\n");
         fd = open("var/www/static/404.html", O_RDONLY);
         printf("%s",tempbuf);
-        
+        */
       }
 
       //For alle andre filtyper

@@ -247,7 +247,7 @@ int main ()
             else {
               /*printf("HTTP/1.1 404 NOT FOUND\n");
               printf("Content-Type: text/html\n\n");
-              printf("The File type of the request is unsupported\n");*/
+              printf("The File type of the request is unsupported\n\n");*/
               printf("HTTP/1.1 415 Unsupported Media Type\n");
               printf("Content-Type: text/plain; charset=utf-8\n\n");
               printf("The File type of the request is unsupported\n"); 

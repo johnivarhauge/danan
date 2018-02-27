@@ -171,14 +171,14 @@ int main ()
 
       //Gjelder for post og get med parameter
       if (strchr(filepath,'?')!=NULL && (open(fullpath, O_RDONLY) != -1) || strcmp(requestmethod, "POST")==0){
-        system(fullpath);
+        //system(fullpath);
 
-        /*
+               
         printf("HTTP/1.1 404 NOT FOUND\n");
         printf("Content-Type: text/html\n\n");
         fd = open("var/www/static/404.html", O_RDONLY);
         printf("%s",tempbuf);
-        */
+        
       }
 
       //For alle andre filtyper
@@ -237,6 +237,11 @@ int main ()
               printf("HTTP/1.1 200 OK\n");
               printf("Content-Type: application/javascript\n\n");
             }
+            else if( strcmp(filetype, "apk")==0) {
+              printf("HTTP/1.1 200 OK\n");
+              printf("Content-Type: application/apk\n\n");
+            }
+
             else {
               /*printf("HTTP/1.1 404 NOT FOUND\n");
               printf("Content-Type: text/html\n\n");

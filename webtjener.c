@@ -239,7 +239,9 @@ int main ()
             }
             else if( strcmp(filetype, "apk")==0) {
               printf("HTTP/1.1 200 OK\n");
-              printf("Content-Type: application/octet-stream\n\n");
+              printf("Content-Type: application/octet-stream\n");
+              printf("Content-Length: 1455137 \n\n");
+
             }
 
             else {

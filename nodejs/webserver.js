@@ -275,38 +275,35 @@ restapi.post('/androidLogin/', function(req, res){
     console.log("brukernavn = " + loginID + "passord = " + password);
     
     db.serialize(function() {
-        db.run("SELECT passord FROM Bruker where brukerID = ?",[loginID], function(err, row){
-            if (err){
-                //console.err(err);
-                res.status(500);
+        db.get("SELECT count(brukerID) as Antall FROM Bruker where brukerID = ?",[loginID], function(err, row){
+            if(row === 1){
+                db.run("SELECT passordhash FROM Bruker where brukerID = ?",[loginID], function(err, row){
+                    if (err){
+                        //console.err(err);
+                        res.status(500);
+                    }
+                    else {
+                        //console.log("alle dikt slettet");
+                        if(String(row).between('>','<').s === hashpassword){
+                            res.status(200);
+                            res.send('true');
+                        }
+                        else{
+                            res.status(500);
+                            res.send('false');
+                        }
+                    }
+                });
             }
-            else {
-                //console.log("alle dikt slettet");
-                if(String(row).between('>','<').s === hashpassword){
-                    //var xmlstring = '<?xml version="1.0"?>\n<Dikt xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + '<Status>endret</Status>' + '</Dikt>'
-                    var htmlstring = '<script>window.open("file:///android_asset/dikt.html")</script>'
-                    //res.send(xmlstring);
-                    res.send(htmlstring);
-                }
-                else{
-                    //var xmlstring = '<?xml version="1.0"?>\n<Dikt xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd">' + '<Status>endret</Status>' + '</Dikt>'
-                    var htmlstring = '<script>window.open("file:///android_asset/index.html")</script>'
-                    //res.send(xmlstring);
-                    res.send(htmlstring);
-                }
-            }
-        });
-        db.run("INSERT INTO Sesjon(sesjonsID, brukerID) VALUES(?, ?)",[cookie, loginID],function(err, row){
-            if (err){
-                console.err(err);
-                res.status(500);
-            }
-            else {
-                console.log('ny sesjon opprettet');
-                //res.set('Content-Type', 'application/xml');
-                //var xmlstring = '<?xml version="1.0"?>\n<Sesjon xmlns="https://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="brukerschema.xsd"> ny sesjon opprettet</Sesjon>'
-                //var htmlstring = 
-                //res.send(xmlstring);
+            else{
+                db.run("INSERT INTO Bruker(brukerID, passordhash) VALUES(?,?)" [loginID,hashpassword], function(err, row){
+                    if(err){
+                        console.error(err);
+                    }
+                    else{
+                        console.log("Bruker lagt til!");
+                    }
+                });
             }
         });
     });

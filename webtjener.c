@@ -171,7 +171,7 @@ int main ()
 
       //Gjelder for post og get med parameter
       if (strchr(filepath,'?')!=NULL && (open(fullpath, O_RDONLY) != -1) || strcmp(requestmethod, "POST")==0){
-        //system(fullpath);
+        system(fullpath);
 
         /*       
         printf("HTTP/1.1 404 NOT FOUND\n");
@@ -224,6 +224,7 @@ int main ()
             else if( strcmp(filetype, "xsl")==0) {
               printf("HTTP/1.1 200 OK\n");
               printf("Content-Type: application/xslt+xml\n\n");
+              printf("Content-Length: 853 \n\n");
             }
             else if( strcmp(filetype, "css")==0) {
               printf("HTTP/1.1 200 OK\n");
@@ -240,7 +241,7 @@ int main ()
             else if( strcmp(filetype, "apk")==0) {
               printf("HTTP/1.1 200 OK\n");
               printf("Content-Type: application/octet-stream\n");
-              printf("Content-Length: 1455137 \n\n");
+              printf("Content-Length: 1454669 \n\n");
 
             }
 

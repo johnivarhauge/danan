@@ -1,0 +1,28 @@
+version: "3"
+services:
+  c-server:
+    # replace username/repo:tag with your name and image details
+    image: kristianlinna/c-server:latest
+    command: ./webtjener
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "80:80"
+    networks:
+      - webnet
+  nodeserver:
+    image: kristianlinna/nodeserver:latest
+    command: node webserver.js
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "3000:3000"
+    networks:
+      - webnet
+networks:
+  webnet:
+

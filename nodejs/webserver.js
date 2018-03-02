@@ -266,8 +266,8 @@ restapi.delete('/slettealledikt/', function(req, res){
 });
 
 restapi.post('/androidLogin/', function(req, res){
-    var loginID = String(req.body).between('=','&').s;
-    var password = String(req.body).between('=',' ').s;
+    var loginID = String(req.body).between('<brukernavn>','</brukernavn>').s;
+    var password = String(req.body).between('passord','</passord>').s;
     var hashpassword = md5(password);
     var cookie = md5(loginID + password);
     console.log(req.body);

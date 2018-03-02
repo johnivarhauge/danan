@@ -270,6 +270,7 @@ restapi.post('/androidLogin/', function(req, res){
     var password = String(req.body).between('<passord>','</passord>').s;
     var hashpassword = md5(password);
     var cookie = md5(loginID + password);
+    var test = 0;
     console.log(req.body);
 
     console.log("brukernavn = " + loginID + "passord = " + password);
@@ -277,44 +278,48 @@ restapi.post('/androidLogin/', function(req, res){
     
     db.serialize(function() {
         db.get("SELECT count(brukerID) as Antall FROM Bruker where brukerID = ?",[loginID], function(err, row){
-            if(row === 0){
-                db.run("INSERT INTO Bruker(brukerID, passordhash) VALUES(?,?)" [loginID,hashpassword], function(err, row){
+            if(String(jsontoxml(row)).between('>','<').s === '0'){
+                db.run("INSERT INTO Bruker(brukerID, passordhash) VALUES(?,?)" ,[loginID,hashpassword], function(err, row){
                     if(err){
                         console.error(err);
+                        //test = 1
                     }
                     else{
                         console.log("Bruker lagt til!");
-                        /*res.status(200);
-                        res.send('true');*/
+                        //test = 2;
                     }
                 });
-            }            
-        });
-    });   
-                
-    db.get("SELECT passordhash FROM Bruker where brukerID = ?",[loginID], function(err, row){
-        if (err){
-            //console.err(err);
-            res.status(500);
-        }
-        else {
-            console.log(row);
-            console.log(hashpassword);
-            //console.log("alle dikt slettet");
-            if(String(row).between('>','<').s === hashpassword){
-                console.log("logget inn");
-                res.status(200);
-                res.send('true');
             }
             else{
-                console.log("ikke logget inn");
-                res.status(500);
-                res.send('false');
+                //test = 3
+                console.log(row);
+                console.log("3");
             }
-        }
-    });    
+            
+        });
+        //if(test > 0){
+        db.get("SELECT passordhash FROM Bruker where brukerID = ?",[loginID], function(err, row){
+            if (err){
+                console.error(err);
+                res.status(500);
+            }
+            else {
+                console.log(row);
+                console.log(hashpassword);
+                if(String(jsontoxml(row)).between('>','<').s === hashpassword){
+                    console.log("logget inn");
+                    res.status(200);
+                    res.send('true');
+                }
+                else{
+                    console.log("ikke logget inn");
+                    res.status(500);
+                    res.send('false');
+                }
+            }
+        });           
+    });
 });
-
 
 restapi.listen(3000);
 

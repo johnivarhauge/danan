@@ -171,7 +171,7 @@ int main ()
 
       //Gjelder for post og get med parameter
       if (strchr(filepath,'?')!=NULL && (open(fullpath, O_RDONLY) != -1) || strcmp(requestmethod, "POST")==0){
-        //system(fullpath);
+        system(fullpath);
 
         /*       
         printf("HTTP/1.1 404 NOT FOUND\n");

@@ -39,7 +39,7 @@ if [ $ERBRUKER -eq 1 ]; then
 #If username does not exist
 else
     #Saves new user to database
-    newUserStatus$(curl --request POST -H "Content-Type: text/xml" -d "<Bruker><brukerID>$BRUKER</brukerID><passordhash>$PWDHASH</passordhash></Bruker>" http://localhost:3000/nybruker)
+    newUserStatus=$(curl --request POST -H "Content-Type: text/xml" -d "<Bruker><brukerID>$BRUKER</brukerID><passordhash>$PWDHASH</passordhash></Bruker>" http://localhost:3000/nybruker)
     #Creates a session ID
     COOKIE=$(echo -n $BRUKER$PASSORD | md5sum | cut -f 1 -d ' ')
     #Saves session ID to REST-Server database

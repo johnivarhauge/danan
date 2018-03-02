@@ -267,46 +267,52 @@ restapi.delete('/slettealledikt/', function(req, res){
 
 restapi.post('/androidLogin/', function(req, res){
     var loginID = String(req.body).between('<brukernavn>','</brukernavn>').s;
-    var password = String(req.body).between('passord','</passord>').s;
+    var password = String(req.body).between('<passord>','</passord>').s;
     var hashpassword = md5(password);
     var cookie = md5(loginID + password);
     console.log(req.body);
 
     console.log("brukernavn = " + loginID + "passord = " + password);
+
     
     db.serialize(function() {
         db.get("SELECT count(brukerID) as Antall FROM Bruker where brukerID = ?",[loginID], function(err, row){
-            if(row === 1){
-                db.run("SELECT passordhash FROM Bruker where brukerID = ?",[loginID], function(err, row){
-                    if (err){
-                        //console.err(err);
-                        res.status(500);
-                    }
-                    else {
-                        //console.log("alle dikt slettet");
-                        if(String(row).between('>','<').s === hashpassword){
-                            res.status(200);
-                            res.send('true');
-                        }
-                        else{
-                            res.status(500);
-                            res.send('false');
-                        }
-                    }
-                });
-            }
-            else{
+            if(row === 0){
                 db.run("INSERT INTO Bruker(brukerID, passordhash) VALUES(?,?)" [loginID,hashpassword], function(err, row){
                     if(err){
                         console.error(err);
                     }
                     else{
                         console.log("Bruker lagt til!");
+                        /*res.status(200);
+                        res.send('true');*/
                     }
                 });
-            }
+            }            
         });
-    });
+    });   
+                
+    db.get("SELECT passordhash FROM Bruker where brukerID = ?",[loginID], function(err, row){
+        if (err){
+            //console.err(err);
+            res.status(500);
+        }
+        else {
+            console.log(row);
+            console.log(hashpassword);
+            //console.log("alle dikt slettet");
+            if(String(row).between('>','<').s === hashpassword){
+                console.log("logget inn");
+                res.status(200);
+                res.send('true');
+            }
+            else{
+                console.log("ikke logget inn");
+                res.status(500);
+                res.send('false');
+            }
+        }
+    });    
 });
 
 
